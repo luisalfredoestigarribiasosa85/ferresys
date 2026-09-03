@@ -1,0 +1,13 @@
+class CreateCategories < ActiveRecord::Migration[8.1]
+  def change
+    create_table :categories do |t|
+      t.references :account, null: false, foreign_key: true
+      t.string :name, null: false, default: ""
+      t.text :description
+
+      t.timestamps
+    end
+
+    add_index :categories, [ :account_id, :name ], unique: true
+  end
+end

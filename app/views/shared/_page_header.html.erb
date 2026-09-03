@@ -1,0 +1,11 @@
+<div class="mb-6 flex items-center justify-between gap-4">
+  <div>
+    <h2 class="text-xl font-bold text-slate-900"><%= title %></h2>
+    <% if local_assigns[:subtitle].present? %>
+      <p class="mt-1 text-sm text-slate-500"><%= subtitle %></p>
+    <% end %>
+  </div>
+  <% if local_assigns[:action].present? %>
+    <div><%= action %></div>
+  <% end %>
+</div>

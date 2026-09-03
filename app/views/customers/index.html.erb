@@ -1,0 +1,40 @@
+<% content_for(:page_title) { "Clientes" } %>
+
+<%= render "shared/page_header", title: "Clientes", subtitle: "#{@customers.count} clientes", action:
+  link_to("Nuevo cliente", new_customer_path, class: button_classes) %>
+
+<div class="mb-4">
+  <%= form_with url: customers_path, method: :get, class: "flex max-w-md gap-2" do |form| %>
+    <%= form.text_field :q, value: params[:q], placeholder: "Buscar por nombre o documento…", class: field_classes %>
+    <%= form.submit "Buscar", class: button_classes(:secondary) %>
+  <% end %>
+</div>
+
+<div class="<%= card_classes %> overflow-hidden">
+  <% if @customers.any? %>
+    <table class="w-full text-sm">
+      <thead class="bg-slate-50 text-left text-xs uppercase tracking-wider text-slate-500">
+        <tr>
+          <th class="px-5 py-3 font-semibold">Nombre</th>
+          <th class="px-5 py-3 font-semibold">Documento</th>
+          <th class="px-5 py-3 font-semibold">Teléfono</th>
+          <th class="px-5 py-3 text-right font-semibold">Compras</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        <% @customers.each do |customer| %>
+          <tr class="hover:bg-slate-50">
+            <td class="px-5 py-3">
+              <%= link_to customer.name, customer, class: "font-medium text-slate-900 hover:text-blue-600" %>
+            </td>
+            <td class="px-5 py-3 font-mono text-xs text-slate-500"><%= customer.document_number.presence || "—" %></td>
+            <td class="px-5 py-3 text-slate-500"><%= customer.phone.presence || "—" %></td>
+            <td class="px-5 py-3 text-right text-slate-700"><%= customer.sales.count %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <%= render "shared/empty_state", message: "No hay clientes todavía" %>
+  <% end %>
+</div>

@@ -1,0 +1,52 @@
+<% content_for(:page_title) { @product.name } %>
+
+<%= render "shared/page_header", title: @product.name,
+  subtitle: "#{@product.sku.presence || "Sin código"} · #{@product.category&.name || "Sin categoría"}",
+  action: link_to("Editar", edit_product_path(@product), class: button_classes(:secondary)) %>
+
+<div class="grid gap-6 md:grid-cols-2">
+  <div class="<%= card_classes %> p-6">
+    <h3 class="mb-4 font-semibold text-slate-900">Información</h3>
+    <dl class="space-y-3 text-sm">
+      <div class="flex justify-between"><dt class="text-slate-500">Descripción</dt><dd class="text-slate-800"><%= @product.description.presence || "—" %></dd></div>
+      <div class="flex justify-between"><dt class="text-slate-500">Costo</dt><dd class="text-slate-800"><%= money(@product.cost_price) %></dd></div>
+      <div class="flex justify-between"><dt class="text-slate-500">Precio</dt><dd class="font-semibold text-slate-900"><%= money(@product.price) %></dd></div>
+      <div class="flex justify-between"><dt class="text-slate-500">Unidad</dt><dd class="text-slate-800"><%= @product.unit %></dd></div>
+      <div class="flex justify-between">
+        <dt class="text-slate-500">Estado</dt>
+        <dd>
+          <% if @product.active? %>
+            <span class="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700">Activo</span>
+          <% else %>
+            <span class="rounded-full bg-slate-200 px-2.5 py-1 text-xs font-semibold text-slate-600">Inactivo</span>
+          <% end %>
+        </dd>
+      </div>
+    </dl>
+  </div>
+
+  <div class="<%= card_classes %> p-6">
+    <h3 class="mb-4 font-semibold text-slate-900">Stock</h3>
+    <dl class="space-y-3 text-sm">
+      <div class="flex justify-between">
+        <dt class="text-slate-500">Disponible</dt>
+        <dd class="<%= @product.low_stock? ? "font-bold text-red-600" : "font-semibold text-slate-900" %>">
+          <%= @product.stock %> <%= @product.unit %>
+        </dd>
+      </div>
+      <div class="flex justify-between"><dt class="text-slate-500">Stock mínimo</dt><dd class="text-slate-800"><%= @product.min_stock %> <%= @product.unit %></dd></div>
+      <div class="flex justify-between"><dt class="text-slate-500">Estado</dt><dd class="text-slate-800"><%= @product.low_stock? ? "Stock bajo" : "OK" %></dd></div>
+    </dl>
+
+    <div class="mt-5 flex gap-2 border-t border-slate-100 pt-5">
+      <%= link_to "Ver movimientos", stock_movements_path(product_id: @product.id), class: button_classes(:secondary) %>
+      <%= link_to "Registrar movimiento", new_stock_movement_path(product_id: @product.id), class: button_classes %>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4 text-right">
+  <%= button_to "Eliminar producto", @product, method: :delete,
+      data: { turbo_confirm: "¿Eliminar #{@product.name}? Esta acción no se puede deshacer." },
+      class: button_classes(:danger) %>
+</div>

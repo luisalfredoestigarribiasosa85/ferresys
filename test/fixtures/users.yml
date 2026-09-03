@@ -1,0 +1,20 @@
+owner_one:
+  account: one
+  name: Dueño Uno
+  email: owner@uno.com
+  password_digest: <%= BCrypt::Password.create("password123", cost: 4) %>
+  role: owner
+
+employee_one:
+  account: one
+  name: Empleado Uno
+  email: empleado@uno.com
+  password_digest: <%= BCrypt::Password.create("password123", cost: 4) %>
+  role: employee
+
+owner_two:
+  account: two
+  name: Dueño Dos
+  email: owner@dos.com
+  password_digest: <%= BCrypt::Password.create("password123", cost: 4) %>
+  role: owner

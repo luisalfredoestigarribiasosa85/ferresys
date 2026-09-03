@@ -1,0 +1,7 @@
+one:
+  name: Ferretería Uno
+  next_sale_number: 100
+
+two:
+  name: Ferretería Dos
+  next_sale_number: 100

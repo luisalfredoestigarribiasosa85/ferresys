@@ -1,0 +1,19 @@
+es:
+  date:
+    formats:
+      default: "%d/%m/%Y"
+      short: "%d/%m/%Y"
+  time:
+    formats:
+      default: "%d/%m/%Y %H:%M"
+      short: "%d/%m/%Y %H:%M"
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "La validación falló: %{errors}"
+  errors:
+    messages:
+      record_invalid: "No se pudo guardar: %{errors}"
+      restrict_dependent_destroy:
+        has_one: "No se puede eliminar porque existe un %{record} asociado"
+        has_many: "No se puede eliminar porque existen %{record} asociados"

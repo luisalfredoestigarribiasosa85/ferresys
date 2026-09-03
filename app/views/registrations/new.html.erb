@@ -1,0 +1,45 @@
+<% content_for(:page_title) { "Crear cuenta" } %>
+
+<div class="w-full max-w-md">
+  <div class="mb-8 text-center">
+    <h1 class="mt-4 text-2xl font-bold text-slate-900">Crear tu cuenta</h1>
+    <p class="mt-1 text-sm text-slate-500">Cada cuenta corresponde a una ferretería</p>
+  </div>
+
+  <div class="<%= card_classes %> p-6">
+    <%= form_with url: signup_path, method: :post, local: true, class: "space-y-4" do |form| %>
+      <%= render "shared/form_errors", object: @user %>
+
+      <div>
+        <%= form.label :account_name, "Nombre de la ferretería", class: label_classes %>
+        <%= form.text_field :account_name, autofocus: true, required: true, class: field_classes, placeholder: "Ferretería Ejemplo" %>
+      </div>
+
+      <div>
+        <%= form.label :name, "Tu nombre", class: label_classes %>
+        <%= form.text_field :name, required: true, class: field_classes %>
+      </div>
+
+      <div>
+        <%= form.label :email, "Email", class: label_classes %>
+        <%= form.email_field :email, autocomplete: "email", required: true, class: field_classes %>
+      </div>
+
+      <div>
+        <%= form.label :password, "Contraseña (mínimo 8 caracteres)", class: label_classes %>
+        <%= form.password_field :password, autocomplete: "new-password", required: true, minlength: 8, class: field_classes %>
+      </div>
+
+      <div>
+        <%= form.label :password_confirmation, "Confirmar contraseña", class: label_classes %>
+        <%= form.password_field :password_confirmation, autocomplete: "new-password", required: true, class: field_classes %>
+      </div>
+
+      <%= form.submit "Crear cuenta", class: "#{button_classes} w-full" %>
+    <% end %>
+  </div>
+
+  <p class="mt-6 text-center text-sm text-slate-500">
+    ¿Ya tenés cuenta? <%= link_to "Iniciar sesión", new_session_path, class: "font-semibold text-blue-600 hover:text-blue-700" %>
+  </p>
+</div>

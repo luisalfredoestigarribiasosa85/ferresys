@@ -1,0 +1,36 @@
+<% content_for(:page_title) { "Categorías" } %>
+
+<%= render "shared/page_header", title: "Categorías", subtitle: "#{@categories.count} categorías", action:
+  link_to("Nueva categoría", new_category_path, class: button_classes) %>
+
+<div class="<%= card_classes %> overflow-hidden">
+  <% if @categories.any? %>
+    <table class="w-full text-sm">
+      <thead class="bg-slate-50 text-left text-xs uppercase tracking-wider text-slate-500">
+        <tr>
+          <th class="px-5 py-3 font-semibold">Nombre</th>
+          <th class="px-5 py-3 font-semibold">Descripción</th>
+          <th class="px-5 py-3 text-right font-semibold">Productos</th>
+          <th class="px-5 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        <% @categories.each do |category| %>
+          <tr class="hover:bg-slate-50">
+            <td class="px-5 py-3 font-medium text-slate-900"><%= category.name %></td>
+            <td class="px-5 py-3 text-slate-500"><%= category.description.presence || "—" %></td>
+            <td class="px-5 py-3 text-right text-slate-700"><%= category.products.count %></td>
+            <td class="px-5 py-3 text-right">
+              <%= link_to "Editar", edit_category_path(category), class: "text-sm font-medium text-blue-600 hover:text-blue-700" %>
+              <%= button_to "Eliminar", category, method: :delete,
+                  data: { turbo_confirm: "¿Eliminar la categoría #{category.name}?" },
+                  class: "ml-3 inline text-sm font-medium text-red-600 hover:text-red-700" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <%= render "shared/empty_state", message: "No hay categorías todavía" %>
+  <% end %>
+</div>

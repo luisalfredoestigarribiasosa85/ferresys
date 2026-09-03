@@ -1,0 +1,34 @@
+<% content_for(:page_title) { @customer.name } %>
+
+<%= render "shared/page_header", title: @customer.name, action: link_to("Editar", edit_customer_path(@customer), class: button_classes(:secondary)) %>
+
+<div class="<%= card_classes %> p-6">
+  <dl class="grid gap-4 text-sm sm:grid-cols-2">
+    <div><dt class="text-slate-500">Documento</dt><dd class="mt-0.5 text-slate-800"><%= @customer.document_number.presence || "—" %></dd></div>
+    <div><dt class="text-slate-500">Teléfono</dt><dd class="mt-0.5 text-slate-800"><%= @customer.phone.presence || "—" %></dd></div>
+    <div><dt class="text-slate-500">Email</dt><dd class="mt-0.5 text-slate-800"><%= @customer.email.presence || "—" %></dd></div>
+    <div><dt class="text-slate-500">Dirección</dt><dd class="mt-0.5 text-slate-800"><%= @customer.address.presence || "—" %></dd></div>
+  </dl>
+</div>
+
+<div class="mt-6 <%= card_classes %>">
+  <div class="border-b border-slate-200 px-5 py-4">
+    <h3 class="font-semibold text-slate-900">Historial de ventas</h3>
+  </div>
+  <div class="p-5">
+    <% if @customer.sales.any? %>
+      <ul class="divide-y divide-slate-100">
+        <% @customer.sales.order(created_at: :desc).each do |sale| %>
+          <li class="flex items-center justify-between py-2.5">
+            <%= link_to sale_path(sale), class: "text-sm font-medium text-slate-900 hover:text-blue-600" do %>
+              Venta #<%= sale.number %> · <%= simple_date(sale.created_at) %>
+            <% end %>
+            <span class="text-sm font-semibold"><%= money(sale.total) %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <%= render "shared/empty_state", message: "Este cliente no registra ventas" %>
+    <% end %>
+  </div>
+</div>

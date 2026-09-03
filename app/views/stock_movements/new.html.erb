@@ -1,0 +1,45 @@
+<% content_for(:page_title) { "Nuevo movimiento" } %>
+
+<%= render "shared/page_header", title: "Nuevo movimiento de stock",
+  subtitle: "Compras, ventas o ajustes manuales de inventario",
+  action: link_to("Volver", stock_movements_path, class: button_classes(:secondary)) %>
+
+<div class="max-w-lg <%= card_classes %> p-6">
+  <%= render "shared/form_errors", object: @movement %>
+  <%= form_with url: stock_movements_path, scope: :stock_movement, class: "space-y-4" do |form| %>
+    <div>
+      <%= form.label :product_id, "Producto", class: label_classes %>
+      <%= form.collection_select :product_id, @products, :id, :name,
+          { include_blank: "Seleccionar producto", selected: params[:product_id] },
+          { class: field_classes, required: true } %>
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <%= form.label :movement_type, "Tipo de movimiento", class: label_classes %>
+        <%= form.select :movement_type,
+            options_for_select(movement_type_options, params[:movement_type]),
+            {},
+            class: field_classes %>
+      </div>
+      <div>
+        <%= form.label :quantity, "Cantidad", class: label_classes %>
+        <%= form.number_field :quantity, required: true, class: field_classes %>
+      </div>
+    </div>
+
+    <p class="rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-500" data-movement-help>
+      Compra y devolución suman stock. Ajuste puede sumar o restar (usá un número negativo para descontar).
+    </p>
+
+    <div>
+      <%= form.label :note, "Nota / motivo", class: label_classes %>
+      <%= form.text_field :note, class: field_classes, placeholder: "Ej: Compra al proveedor XYZ" %>
+    </div>
+
+    <div class="flex items-center justify-end gap-3">
+      <%= link_to "Cancelar", stock_movements_path, class: button_classes(:secondary) %>
+      <%= form.submit "Registrar movimiento", class: button_classes %>
+    </div>
+  <% end %>
+</div>

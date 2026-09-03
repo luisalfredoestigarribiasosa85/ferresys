@@ -1,0 +1,21 @@
+<% content_for(:page_title) { "Categorías" } %>
+
+<%= render "shared/page_header", title: title, action: link_to("Volver", categories_path, class: button_classes(:secondary)) %>
+
+<div class="max-w-lg <%= card_classes %> p-6">
+  <%= render "shared/form_errors", object: @category %>
+  <%= form_with model: @category, class: "space-y-4" do |form| %>
+    <div>
+      <%= form.label :name, "Nombre", class: label_classes %>
+      <%= form.text_field :name, required: true, autofocus: true, class: field_classes, placeholder: "Ej: Herramientas" %>
+    </div>
+    <div>
+      <%= form.label :description, "Descripción", class: label_classes %>
+      <%= form.text_area :description, rows: 3, class: field_classes %>
+    </div>
+    <div class="flex items-center justify-end gap-3">
+      <%= link_to "Cancelar", categories_path, class: button_classes(:secondary) %>
+      <%= form.submit title, class: button_classes %>
+    </div>
+  <% end %>
+</div>

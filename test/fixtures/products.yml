@@ -1,0 +1,41 @@
+cement:
+  account: one
+  category: construction
+  sku: CEM-50
+  name: Cemento 50kg
+  cost_price: 60000
+  price: 85000
+  stock: 20
+  min_stock: 5
+  unit: bolsa
+  active: true
+
+screwdriver:
+  account: one
+  category: construction
+  sku: SCR-01
+  name: Destornillador plano
+  cost_price: 5000
+  price: 12000
+  stock: 3
+  min_stock: 10
+  unit: unidad
+  active: true
+
+inactive_tool:
+  account: one
+  name: Producto inactivo
+  sku: INAC-1
+  price: 1000
+  stock: 5
+  min_stock: 0
+  active: false
+
+other_account_product:
+  account: two
+  name: Producto de otra ferretería
+  sku: OTRO-1
+  price: 9999
+  stock: 9
+  min_stock: 0
+  active: true

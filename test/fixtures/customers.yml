@@ -1,0 +1,15 @@
+juan:
+  account: one
+  name: Juan Pérez
+  document_number: 1234567
+  phone: "0981 111 111"
+
+maria:
+  account: one
+  name: María López
+  document_number: 7654321
+
+other_account_customer:
+  account: two
+  name: Cliente de otra ferretería
+  document_number: 9999999

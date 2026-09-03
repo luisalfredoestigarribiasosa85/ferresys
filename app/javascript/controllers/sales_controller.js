@@ -1,0 +1,83 @@
+import { Controller } from "@hotwired/stimulus"
+
+export default class extends Controller {
+  static targets = ["lines", "template", "line", "product", "quantity", "unitPrice", "subtotal", "discount", "summaryCount", "summarySubtotal", "summaryTotal"]
+
+  connect() {
+    this.loadCatalog()
+    this.nextLineIndex = this.countLines() + 1
+    this.recalculate()
+  }
+
+  loadCatalog() {
+    const node = document.getElementById("sale-catalog")
+    this.catalog = node ? JSON.parse(node.textContent) : []
+  }
+
+  countLines() {
+    return this.lineTargets.length
+  }
+
+  addLine() {
+    const content = this.templateTarget.innerHTML.replaceAll(/__INDEX__/g, this.nextLineIndex++)
+    this.linesTarget.insertAdjacentHTML("beforeend", content)
+    this.recalculate()
+  }
+
+  removeLine(event) {
+    event.currentTarget.closest("[data-sales-target='line']").remove()
+    this.recalculate()
+  }
+
+  selectProduct(event) {
+    const select = event.currentTarget
+    const product = this.findProduct(select.value)
+    const line = select.closest("[data-sales-target='line']")
+    const priceField = line.querySelector("[data-sales-target='unitPrice']")
+    const quantityField = line.querySelector("[data-sales-target='quantity']")
+    const stockHint = line.querySelector("[data-sales-target='stockHint']")
+
+    if (product) {
+      priceField.value = product.price
+      quantityField.max = product.stock
+      stockHint.textContent = `Stock: ${product.stock} ${product.unit}`
+    } else {
+      priceField.value = ""
+      quantityField.max = ""
+      stockHint.textContent = "—"
+    }
+    this.recalculate()
+  }
+
+  recalculate() {
+    let subtotal = 0
+    let count = 0
+
+    this.lineTargets.forEach((line) => {
+      const quantity = parseFloat(line.querySelector("[data-sales-target='quantity']").value) || 0
+      const price = parseFloat(line.querySelector("[data-sales-target='unitPrice']").value) || 0
+      const lineTotal = quantity * price
+
+      line.querySelector("[data-sales-target='subtotal']").textContent = this.format(lineTotal)
+      subtotal += lineTotal
+
+      if (line.querySelector("[data-sales-target='product']").value) count++
+    })
+
+    const discount = parseFloat(this.discountTarget.value) || 0
+    const total = Math.max(subtotal - discount, 0)
+
+    this.summaryCountTarget.textContent = count
+    this.summarySubtotalTarget.textContent = this.format(subtotal)
+    this.summaryTotalTarget.textContent = this.format(total)
+  }
+
+  findProduct(id) {
+    return this.catalog.find((p) => String(p.id) === String(id))
+  }
+
+  format(value) {
+    const number = new Intl.NumberFormat("es", { minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(value)
+    return `Gs. ${number}`
+  }
+}

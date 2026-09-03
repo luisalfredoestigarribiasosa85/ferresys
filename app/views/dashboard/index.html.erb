@@ -1,0 +1,71 @@
+<% content_for(:page_title) { "Panel" } %>
+
+<%= render "shared/page_header", title: "Inicio", subtitle: "Resumen de #{current_account.name}", action:
+  link_to("Nueva venta", new_sale_path, class: button_classes) %>
+
+<% stat_cards = [
+  { label: "Ventas de hoy", value: @sales_count, color: :blue },
+  { label: "Ingresos de hoy", value: money(@daily_total), color: :emerald },
+  { label: "Ingresos del mes", value: money(@month_total), color: :indigo },
+  { label: "Productos", value: @product_count, color: :amber }
+] %>
+
+<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+  <% stat_cards.each do |card| %>
+    <div class="<%= card_classes %> p-5">
+      <p class="text-sm font-medium text-slate-500"><%= card[:label] %></p>
+      <p class="mt-2 text-2xl font-bold text-slate-900"><%= card[:value] %></p>
+    </div>
+  <% end %>
+</div>
+
+<div class="mt-6 grid gap-6 xl:grid-cols-2">
+  <div class="<%= card_classes %>">
+    <div class="border-b border-slate-200 px-5 py-4">
+      <h3 class="font-semibold text-slate-900">Últimas ventas</h3>
+    </div>
+    <div class="p-5">
+      <% if @recent_sales.any? %>
+        <ul class="divide-y divide-slate-100">
+          <% @recent_sales.each do |sale| %>
+            <li class="flex items-center justify-between py-2.5">
+              <%= link_to sale_path(sale), class: "group flex items-center gap-3" do %>
+                <span class="text-xs font-mono text-slate-500">#<%= sale.number %></span>
+                <span class="group-hover:text-blue-600"><%= sale.customer&.name || "Consumidor final" %></span>
+              <% end %>
+              <span class="text-sm font-semibold text-slate-900"><%= money(sale.total) %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <%= render "shared/empty_state", message: "Todavía no hay ventas" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="<%= card_classes %>">
+    <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4">
+      <h3 class="font-semibold text-slate-900">Stock bajo</h3>
+      <%= link_to "Productos", products_path, class: "text-sm font-medium text-blue-600 hover:text-blue-700" %>
+    </div>
+    <div class="p-5">
+      <% if @low_stock_products.any? %>
+        <ul class="divide-y divide-slate-100">
+          <% @low_stock_products.each do |product| %>
+            <li class="flex items-center justify-between py-2.5">
+              <div>
+                <p class="text-sm font-medium text-slate-900"><%= product.name %></p>
+                <p class="text-xs text-slate-500"><%= product.sku.presence || "sin código" %></p>
+              </div>
+              <span class="<%= product.stock.zero? ? "rounded-full bg-red-100 px-2.5 py-1 text-xs font-bold text-red-700" : "rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-700" %>">
+                <%= product.stock %> <%= product.unit %>
+              </span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <%= render "shared/empty_state", message: "No hay productos con stock bajo" %>
+      <% end %>
+    </div>
+  </div>
+</div>

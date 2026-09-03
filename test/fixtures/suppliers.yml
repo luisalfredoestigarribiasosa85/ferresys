@@ -1,0 +1,9 @@
+ferremax:
+  account: one
+  name: Distribuidora FerreMax
+  ruc: "80000000-1"
+
+tornillo:
+  account: one
+  name: Importadora El Tornillo
+  ruc: "80000001-2"

@@ -1,0 +1,35 @@
+<% content_for(:page_title) { "Clientes" } %>
+
+<%= render "shared/page_header", title: title, action: link_to("Volver", customers_path, class: button_classes(:secondary)) %>
+
+<div class="max-w-lg <%= card_classes %> p-6">
+  <%= render "shared/form_errors", object: @customer %>
+  <%= form_with model: @customer, class: "space-y-4" do |form| %>
+    <div>
+      <%= form.label :name, "Nombre y apellido", class: label_classes %>
+      <%= form.text_field :name, required: true, autofocus: true, class: field_classes %>
+    </div>
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <%= form.label :document_number, "Cédula / RUC", class: label_classes %>
+        <%= form.text_field :document_number, class: field_classes %>
+      </div>
+      <div>
+        <%= form.label :phone, "Teléfono", class: label_classes %>
+        <%= form.text_field :phone, class: field_classes %>
+      </div>
+    </div>
+    <div>
+      <%= form.label :email, "Email", class: label_classes %>
+      <%= form.email_field :email, class: field_classes %>
+    </div>
+    <div>
+      <%= form.label :address, "Dirección", class: label_classes %>
+      <%= form.text_field :address, class: field_classes %>
+    </div>
+    <div class="flex items-center justify-end gap-3">
+      <%= link_to "Cancelar", customers_path, class: button_classes(:secondary) %>
+      <%= form.submit title, class: button_classes %>
+    </div>
+  <% end %>
+</div>

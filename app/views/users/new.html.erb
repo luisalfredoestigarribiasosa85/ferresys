@@ -1,0 +1,29 @@
+<% content_for(:page_title) { "Agregar empleado" } %>
+
+<%= render "shared/page_header", title: "Agregar empleado", action: link_to("Volver", employees_path, class: button_classes(:secondary)) %>
+
+<div class="max-w-lg <%= card_classes %> p-6">
+  <%= render "shared/form_errors", object: @user %>
+  <%= form_with model: @user, url: employees_path, class: "space-y-4" do |form| %>
+    <div>
+      <%= form.label :name, "Nombre y apellido", class: label_classes %>
+      <%= form.text_field :name, required: true, autofocus: true, class: field_classes %>
+    </div>
+    <div>
+      <%= form.label :email, "Email", class: label_classes %>
+      <%= form.email_field :email, autocomplete: "email", required: true, class: field_classes %>
+    </div>
+    <div>
+      <%= form.label :password, "Contraseña (mínimo 8 caracteres)", class: label_classes %>
+      <%= form.password_field :password, autocomplete: "new-password", required: true, minlength: 8, class: field_classes %>
+    </div>
+    <div>
+      <%= form.label :password_confirmation, "Confirmar contraseña", class: label_classes %>
+      <%= form.password_field :password_confirmation, autocomplete: "new-password", required: true, class: field_classes %>
+    </div>
+    <div class="flex items-center justify-end gap-3">
+      <%= link_to "Cancelar", employees_path, class: button_classes(:secondary) %>
+      <%= form.submit "Agregar", class: button_classes %>
+    </div>
+  <% end %>
+</div>

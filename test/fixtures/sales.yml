@@ -1,0 +1,34 @@
+one_completed:
+  account: one
+  customer: juan
+  user: owner_one
+  number: "000001"
+  status: completed
+  payment_method: cash
+  subtotal: 97000
+  discount: 0
+  total: 97000
+  created_at: <%= 2.hours.ago %>
+
+one_cancelled:
+  account: one
+  customer: maria
+  user: owner_one
+  number: "000002"
+  status: cancelled
+  payment_method: card
+  subtotal: 12000
+  discount: 0
+  total: 12000
+  created_at: <%= 1.hour.ago %>
+
+other_account_sale:
+  account: two
+  user: owner_two
+  number: "000001"
+  status: completed
+  payment_method: cash
+  subtotal: 9999
+  discount: 0
+  total: 9999
+  created_at: <%= 1.day.ago %>

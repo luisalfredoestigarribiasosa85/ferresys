@@ -1,0 +1,76 @@
+<% content_for(:page_title) { "Venta ##{@sale.number}" } %>
+
+<%= render "shared/page_header",
+  title: "Venta ##{@sale.number}",
+  subtitle: "#{simple_date(@sale.created_at)} · Registró: #{@sale.user&.name || "—"}",
+  action: link_to("Volver", sales_path, class: button_classes(:secondary)) %>
+
+<div class="grid gap-6 xl:grid-cols-3">
+  <div class="<%= card_classes %> overflow-hidden xl:col-span-2">
+    <div class="border-b border-slate-200 px-5 py-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-semibold text-slate-900">Detalle de la venta</h3>
+        <% if @sale.completed? %>
+          <span class="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700">Completada</span>
+        <% else %>
+          <span class="rounded-full bg-red-100 px-2.5 py-1 text-xs font-semibold text-red-700">Anulada</span>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-left text-xs uppercase tracking-wider text-slate-500">
+          <tr>
+            <th class="px-5 py-3 font-semibold">Producto</th>
+            <th class="px-5 py-3 text-right font-semibold">Precio</th>
+            <th class="px-5 py-3 text-right font-semibold">Cant.</th>
+            <th class="px-5 py-3 text-right font-semibold">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          <% @sale.items.each do |item| %>
+            <tr>
+              <td class="px-5 py-3 font-medium text-slate-900"><%= item.product.name %></td>
+              <td class="px-5 py-3 text-right text-slate-700"><%= money(item.unit_price) %></td>
+              <td class="px-5 py-3 text-right text-slate-700"><%= item.quantity %> <%= item.product.unit %></td>
+              <td class="px-5 py-3 text-right font-semibold"><%= money(item.line_subtotal) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="border-t border-slate-200 bg-slate-50 px-5 py-4 text-sm">
+      <dl class="ml-auto max-w-xs space-y-2">
+        <div class="flex justify-between"><dt class="text-slate-500">Subtotal</dt><dd><%= money(@sale.subtotal) %></dd></div>
+        <div class="flex justify-between"><dt class="text-slate-500">Descuento</dt><dd><%= money(@sale.discount) %></dd></div>
+        <div class="flex justify-between border-t border-slate-200 pt-2 text-base font-bold text-slate-900"><dt>Total</dt><dd><%= money(@sale.total) %></dd></div>
+      </dl>
+    </div>
+  </div>
+
+  <div class="space-y-6">
+    <div class="<%= card_classes %> p-6">
+      <h3 class="mb-4 font-semibold text-slate-900">Datos</h3>
+      <dl class="space-y-3 text-sm">
+        <div class="flex justify-between"><dt class="text-slate-500">Cliente</dt><dd class="text-slate-800"><%= @sale.customer&.name.presence || "Consumidor final" %></dd></div>
+        <div class="flex justify-between"><dt class="text-slate-500">Forma de pago</dt><dd class="text-slate-800 capitalize"><%= @sale.payment_method %></dd></div>
+        <div class="flex justify-between"><dt class="text-slate-500">Vendedor</dt><dd class="text-slate-800"><%= @sale.user&.name || "—" %></dd></div>
+        <% if @sale.note.present? %>
+          <div class="flex flex-col gap-1"><dt class="text-slate-500">Nota</dt><dd class="text-slate-800"><%= @sale.note %></dd></div>
+        <% end %>
+      </dl>
+    </div>
+
+    <% if @sale.completed? %>
+      <div class="<%= card_classes %> p-6">
+        <h3 class="mb-2 font-semibold text-slate-900">Anular venta</h3>
+        <p class="mb-4 text-sm text-slate-500">Se restaura el stock de todos los productos de esta venta.</p>
+        <%= button_to "Anular venta", cancel_sale_path(@sale), method: :patch,
+            data: { turbo_confirm: "¿Anular la venta ##{@sale.number}? Se restaurará el stock." },
+            class: "#{button_classes(:danger)} w-full" %>
+      </div>
+    <% end %>
+  </div>
+</div>

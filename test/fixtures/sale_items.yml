@@ -1,0 +1,13 @@
+one_cement:
+  sale: one_completed
+  product: cement
+  quantity: 1
+  unit_price: 85000
+  subtotal: 85000
+
+one_screwdriver:
+  sale: one_completed
+  product: screwdriver
+  quantity: 1
+  unit_price: 12000
+  subtotal: 12000

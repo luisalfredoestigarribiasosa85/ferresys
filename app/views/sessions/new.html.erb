@@ -1,0 +1,27 @@
+<% content_for(:page_title) { "Iniciar sesión" } %>
+
+<div class="w-full max-w-md">
+  <div class="mb-8 text-center">
+    <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-xl font-bold text-white">F</div>
+    <h1 class="mt-4 text-2xl font-bold text-slate-900">Ferresys</h1>
+    <p class="mt-1 text-sm text-slate-500">Control de ventas e inventario</p>
+  </div>
+
+  <div class="<%= card_classes %> p-6">
+    <%= form_with url: session_path, method: :post, class: "space-y-4" do |form| %>
+      <div>
+        <%= form.label :email, "Email", class: label_classes %>
+        <%= form.email_field :email, autofocus: true, autocomplete: "email", required: true, class: field_classes %>
+      </div>
+      <div>
+        <%= form.label :password, "Contraseña", class: label_classes %>
+        <%= form.password_field :password, autocomplete: "current-password", required: true, class: field_classes %>
+      </div>
+      <%= form.submit "Ingresar", class: "#{button_classes} w-full" %>
+    <% end %>
+  </div>
+
+  <p class="mt-6 text-center text-sm text-slate-500">
+    ¿No tenés cuenta? <%= link_to "Crear cuenta", signup_path, class: "font-semibold text-blue-600 hover:text-blue-700" %>
+  </p>
+</div>
