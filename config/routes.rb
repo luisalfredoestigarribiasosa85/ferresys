@@ -12,6 +12,11 @@ Rails.application.routes.draw do
   resources :customers
   resources :suppliers
   resources :purchases
+  resources :imports, only: %i[new create] do
+    collection do
+      get :template
+    end
+  end
   resources :employees, controller: "users", only: %i[index new create]
   resources :sales do
     patch :cancel, on: :member

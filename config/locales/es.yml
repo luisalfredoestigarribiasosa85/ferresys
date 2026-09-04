@@ -8,6 +8,10 @@ es:
       default: "%d/%m/%Y %H:%M"
       short: "%d/%m/%Y %H:%M"
   activerecord:
+    attributes:
+      purchase:
+        supplier: "Proveedor"
+        supplier_id: "Proveedor"
     errors:
       messages:
         record_invalid: "La validación falló: %{errors}"

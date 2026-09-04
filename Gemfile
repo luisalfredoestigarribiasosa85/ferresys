@@ -18,6 +18,10 @@ gem "stimulus-rails"
 gem "tailwindcss-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
+# CSV parsing for the product importer
+gem "csv"
+# Read native Excel files (.xlsx / .xls) for the product importer
+gem "roo"
 
 gem "foreman"
 

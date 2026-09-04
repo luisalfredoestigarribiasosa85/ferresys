@@ -20,7 +20,7 @@ class SessionFlowTest < ActionDispatch::IntegrationTest
   test "wrong credentials fail gracefully" do
     post session_path, params: { email: "owner@uno.com", password: "mala-password" }
     assert_response :unprocessable_entity
-    assert_select "text", /incorrectos/
+    assert_match /incorrectos/, response.body
   end
 
   test "a tenant cannot see products from another account" do

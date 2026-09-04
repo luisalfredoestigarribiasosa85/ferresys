@@ -24,6 +24,7 @@ class Sale < ApplicationRecord
   validate :customer_belongs_to_account
 
   before_validation :compute_totals
+  before_validation :assign_user, on: :create
   before_create :assign_number
   after_create :apply_stock!
 
@@ -41,6 +42,10 @@ class Sale < ApplicationRecord
   end
 
   private
+
+  def assign_user
+    self.user ||= Current.user if Current.user
+  end
 
   def compute_totals
     lines = items.reject(&:marked_for_destruction?)

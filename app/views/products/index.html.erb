@@ -3,6 +3,10 @@
 <%= render "shared/page_header", title: "Productos", subtitle: "#{@products.unscope(:limit).count} registros", action:
   link_to("Nuevo producto", new_product_path, class: button_classes) %>
 
+<div class="mb-4">
+  <%= link_to "Importar desde Excel", new_import_path, class: "inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700" %>
+</div>
+
 <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">
   <%= form_with url: products_path, method: :get, class: "flex flex-1 gap-2" do |form| %>
     <%= form.text_field :q, value: params[:q], placeholder: "Buscar por nombre o código…", class: field_classes %>

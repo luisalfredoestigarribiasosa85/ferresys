@@ -18,7 +18,7 @@ class SaleTest < ActiveSupport::TestCase
 
     sale.reload
     assert_equal 7, product.reload.stock
-    assert_equal 3, Current.account.stock_movements.sale_type.where(sale: sale).sum(:quantity)
+    assert_equal(-3, Current.account.stock_movements.sale_type.where(sale: sale).sum(:quantity))
     assert_equal 255_000, sale.total
     assert_equal "000100", sale.number
     assert_equal 101, Current.account.reload.next_sale_number

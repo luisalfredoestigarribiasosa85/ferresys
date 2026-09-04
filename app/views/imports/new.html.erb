@@ -1,0 +1,58 @@
+<% content_for(:page_title) { "Importar productos" } %>
+
+<%= render "shared/page_header", title: "Importar productos", subtitle: "Cargá tus productos desde Excel (.xlsx/.xls) o CSV" %>
+
+<div class="max-w-2xl <%= card_classes %> p-6">
+  <%= render "shared/form_errors", object: @product if @product %>
+
+  <p class="text-sm text-slate-600">
+    Subí tu <strong>Excel</strong> (.xlsx / .xls) o un archivo <strong>CSV</strong> con tus productos.
+    Cada fila es un producto. Se toma la <strong>primera hoja</strong> y la primera fila debe ser la de <strong>encabezados</strong>.
+    Descargá la <strong>plantilla</strong> para ver las columnas correctas.
+  </p>
+
+  <div class="mt-4">
+    <%= link_to(template_imports_path, class: "inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700") do %>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+      plantilla_productos.csv
+    <% end %>
+  </div>
+
+  <h4 class="mt-6 text-sm font-semibold text-slate-900">Columnas esperadas</h4>
+  <div class="mt-2 overflow-hidden rounded-lg border border-slate-200">
+    <table class="w-full text-sm">
+      <thead class="bg-slate-50 text-left text-xs uppercase tracking-wider text-slate-500">
+        <tr>
+          <th class="px-4 py-2 font-semibold">Columna</th>
+          <th class="px-4 py-2 font-semibold">Descripción</th>
+          <th class="px-4 py-2 font-semibold">Ejemplo</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100 text-slate-700">
+        <tr><td class="px-4 py-2 font-mono text-xs">nombre*</td><td class="px-4 py-2">Nombre del producto</td><td class="px-4 py-2">Clavo 2 pulgadas</td></tr>
+        <tr><td class="px-4 py-2 font-mono text-xs">sku</td><td class="px-4 py-2">Código único (opcional)</td><td class="px-4 py-2">CLA-2</td></tr>
+        <tr><td class="px-4 py-2 font-mono text-xs">categoria</td><td class="px-4 py-2">Nombre de la categoría (se crea si no existe)</td><td class="px-4 py-2">Fijaciones</td></tr>
+        <tr><td class="px-4 py-2 font-mono text-xs">costo</td><td class="px-4 py-2">Costo (Gs., números)</td><td class="px-4 py-2">15000</td></tr>
+        <tr><td class="px-4 py-2 font-mono text-xs">precio*</td><td class="px-4 py-2">Precio de venta (Gs.)</td><td class="px-4 py-2">25000</td></tr>
+        <tr><td class="px-4 py-2 font-mono text-xs">stock</td><td class="px-4 py-2">Cantidad en existencia</td><td class="px-4 py-2">100</td></tr>
+        <tr><td class="px-4 py-2 font-mono text-xs">minimo</td><td class="px-4 py-2">Stock mínimo para alertas</td><td class="px-4 py-2">20</td></tr>
+        <tr><td class="px-4 py-2 font-mono text-xs">unidad</td><td class="px-4 py-2">Unidad de medida</td><td class="px-4 py-2">unidad / caja / bolsa</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="mt-4 text-xs text-slate-500">* obligatorio. Las columnas van como encabezados en la primera fila. Antes de importar vas a poder revisar cuántos productos están bien y cuáles tienen errores.</p>
+
+  <hr class="my-6 border-slate-200">
+
+  <%= form_with url: imports_path, multipart: true, data: { turbo: false }, class: "space-y-4" do |form| %>
+    <div>
+      <%= form.label :file, "Archivo (Excel o CSV)", class: label_classes %>
+      <%= form.file_field :file, accept: ".csv,.xlsx,.xls,text/csv", required: true, class: field_classes %>
+    </div>
+    <div class="flex items-center justify-end gap-3">
+      <%= link_to "Volver", products_path, class: button_classes(:secondary) %>
+      <%= form.submit "Revisar y validar", class: button_classes %>
+    </div>
+  <% end %>
+</div>

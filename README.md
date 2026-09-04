@@ -16,6 +16,7 @@ Cada cuenta (una ferretería) tiene sus propios productos, ventas, clientes y pr
 
 - Registro de cuenta (cada ferretería) y login por usuario (dueño / empleado)
 - Catálogo de productos con categorías, SKU, costos, precios, stock y mínimo
+- **Importación masiva de productos desde Excel (.xlsx/.xls) o CSV**: plantilla descargable, vista previa y validación por fila, y detección automática de columnas
 - **Ventas** tipo punto de venta: líneas dinámicas, descuento, cliente y forma de pago
 - Filtros de ventas por rango de fecha, cliente, forma de pago y estado
 - Descuento de stock automático y trazabilidad completa vía **movimientos de stock**
