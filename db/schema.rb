@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_01_190080) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_02_190200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -66,6 +66,35 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_01_190080) do
     t.index ["category_id"], name: "index_products_on_category_id"
   end
 
+  create_table "purchase_items", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "product_id", null: false
+    t.bigint "purchase_id", null: false
+    t.integer "quantity", default: 1, null: false
+    t.decimal "subtotal", precision: 12, scale: 2, default: "0.0", null: false
+    t.decimal "unit_cost", precision: 12, scale: 2, default: "0.0", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_purchase_items_on_product_id"
+    t.index ["purchase_id"], name: "index_purchase_items_on_purchase_id"
+  end
+
+  create_table "purchases", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.text "note"
+    t.string "number", null: false
+    t.decimal "subtotal", precision: 12, scale: 2, default: "0.0", null: false
+    t.bigint "supplier_id"
+    t.decimal "total", precision: 12, scale: 2, default: "0.0", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["account_id", "created_at"], name: "index_purchases_on_account_id_and_created_at"
+    t.index ["account_id", "number"], name: "index_purchases_on_account_id_and_number", unique: true
+    t.index ["account_id"], name: "index_purchases_on_account_id"
+    t.index ["supplier_id"], name: "index_purchases_on_supplier_id"
+    t.index ["user_id"], name: "index_purchases_on_user_id"
+  end
+
   create_table "sale_items", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "product_id", null: false
@@ -106,6 +135,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_01_190080) do
     t.text "note"
     t.integer "previous_quantity", default: 0, null: false
     t.bigint "product_id", null: false
+    t.bigint "purchase_id"
     t.integer "quantity", default: 0, null: false
     t.bigint "sale_id"
     t.datetime "updated_at", null: false
@@ -114,6 +144,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_01_190080) do
     t.index ["account_id", "product_id", "created_at"], name: "idx_on_account_id_product_id_created_at_6ec346d83c"
     t.index ["account_id"], name: "index_stock_movements_on_account_id"
     t.index ["product_id"], name: "index_stock_movements_on_product_id"
+    t.index ["purchase_id"], name: "index_stock_movements_on_purchase_id"
     t.index ["sale_id"], name: "index_stock_movements_on_sale_id"
     t.index ["user_id"], name: "index_stock_movements_on_user_id"
   end
@@ -147,6 +178,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_01_190080) do
   add_foreign_key "customers", "accounts"
   add_foreign_key "products", "accounts"
   add_foreign_key "products", "categories"
+  add_foreign_key "purchase_items", "products"
+  add_foreign_key "purchase_items", "purchases"
+  add_foreign_key "purchases", "accounts"
+  add_foreign_key "purchases", "suppliers"
+  add_foreign_key "purchases", "users"
   add_foreign_key "sale_items", "products"
   add_foreign_key "sale_items", "sales"
   add_foreign_key "sales", "accounts"
@@ -154,6 +190,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_01_190080) do
   add_foreign_key "sales", "users"
   add_foreign_key "stock_movements", "accounts"
   add_foreign_key "stock_movements", "products"
+  add_foreign_key "stock_movements", "purchases"
   add_foreign_key "stock_movements", "sales"
   add_foreign_key "stock_movements", "users"
   add_foreign_key "suppliers", "accounts"

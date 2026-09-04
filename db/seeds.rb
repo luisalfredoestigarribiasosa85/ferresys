@@ -78,4 +78,13 @@ if account.sales.none?
   sale.save!
 end
 
+if account.purchases.none?
+  supplier = account.suppliers.order(:name).first
+  purchase = account.purchases.new(supplier: supplier, user: owner, note: "Compra de ejemplo")
+  product_records.first(2).each do |product|
+    purchase.items.build(product: product, quantity: 5, unit_cost: product.cost_price)
+  end
+  purchase.save!
+end
+
 puts "Seeds cargados: #{account.name} / admin@ferrecentral.com / password123"

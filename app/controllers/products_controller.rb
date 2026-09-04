@@ -13,7 +13,9 @@ class ProductsController < ApplicationController
     @categories = current_account.categories.order(:name)
   end
 
-  def show; end
+  def show
+    @movements = @product.stock_movements.recent.limit(20)
+  end
 
   def new
     @product = current_account.products.build

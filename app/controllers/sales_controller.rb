@@ -4,7 +4,10 @@ class SalesController < ApplicationController
   def index
     @sales = current_account.sales.order(created_at: :desc).includes(:customer, :user)
     @sales = @sales.where(status: params[:status]) if params[:status].present?
+    @sales = @sales.where(payment_method: params[:payment_method]) if params[:payment_method].present?
+    @sales = @sales.where(customer_id: params[:customer_id]) if params[:customer_id].present?
     @sales = @sales.where(created_at: filter_dates) if params[:from].present? && params[:to].present?
+    @customers = current_account.customers.order(:name)
   end
 
   def show; end

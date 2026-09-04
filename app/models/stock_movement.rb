@@ -5,6 +5,7 @@ class StockMovement < ApplicationRecord
 
   belongs_to :product
   belongs_to :sale, optional: true
+  belongs_to :purchase, optional: true
   belongs_to :user, optional: true
 
   enum :movement_type, TYPES.each_with_index.to_h

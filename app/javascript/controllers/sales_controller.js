@@ -64,7 +64,7 @@ export default class extends Controller {
       if (line.querySelector("[data-sales-target='product']").value) count++
     })
 
-    const discount = parseFloat(this.discountTarget.value) || 0
+    const discount = this.hasDiscountTarget ? (parseFloat(this.discountTarget.value) || 0) : 0
     const total = Math.max(subtotal - discount, 0)
 
     this.summaryCountTarget.textContent = count

@@ -11,11 +11,17 @@ Rails.application.routes.draw do
   resources :categories
   resources :customers
   resources :suppliers
+  resources :purchases
   resources :employees, controller: "users", only: %i[index new create]
   resources :sales do
     patch :cancel, on: :member
   end
   resources :stock_movements, only: %i[index new create]
+  resources :reports, only: [] do
+    collection do
+      get :daily_cash
+    end
+  end
   resources :dashboard, only: :index
 
   # Reveal health status on /up

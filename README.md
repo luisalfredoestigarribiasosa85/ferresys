@@ -17,9 +17,13 @@ Cada cuenta (una ferretería) tiene sus propios productos, ventas, clientes y pr
 - Registro de cuenta (cada ferretería) y login por usuario (dueño / empleado)
 - Catálogo de productos con categorías, SKU, costos, precios, stock y mínimo
 - **Ventas** tipo punto de venta: líneas dinámicas, descuento, cliente y forma de pago
+- Filtros de ventas por rango de fecha, cliente, forma de pago y estado
 - Descuento de stock automático y trazabilidad completa vía **movimientos de stock**
 - Anulación de venta con restauración de stock
-- Compras y ajustes de inventario manuales
+- **Compras a proveedor**: suma stock y actualiza el costo promedio (costo ponderado)
+- Compras, ajustes y devoluciones de inventario manuales
+- **Caja diaria**: ingreso total del día desglosado por forma de pago
+- Historial de movimientos embebido en la ficha de cada producto
 - Clientes, proveedores y empleados
 - Panel con resumen del día y alertas de stock bajo
 

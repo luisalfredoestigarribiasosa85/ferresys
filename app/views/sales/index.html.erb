@@ -14,10 +14,18 @@
       <%= form.date_field :to, value: params[:to], class: field_classes %>
     </div>
     <div>
+      <%= form.label :customer_id, "Cliente", class: label_classes %>
+      <%= form.collection_select :customer_id, @customers, :id, :name, { include_blank: "Todos", selected: params[:customer_id] }, class: field_classes %>
+    </div>
+    <div>
+      <%= form.label :payment_method, "Forma de pago", class: label_classes %>
+      <%= form.select :payment_method, Sale.payment_methods.map { |k, _| [ k.titleize, k ] }, { include_blank: "Todas", selected: params[:payment_method] }, class: field_classes %>
+    </div>
+    <div>
       <%= form.label :status, "Estado", class: label_classes %>
       <%= form.select :status, Sale.statuses.map { |k, _| [ k.titleize, k ] }, { include_blank: "Todos", selected: params[:status] }, class: field_classes %>
     </div>
-    <%= form.submit "Filtrar", class: button_classes(:secondary) %>
+    <%= form.submit "Filtrar", class: "#{button_classes(:secondary)} cursor-pointer" %>
     <%= link_to "Limpiar", sales_path, class: "text-sm font-medium text-slate-500 hover:text-slate-700" %>
   <% end %>
 </div>

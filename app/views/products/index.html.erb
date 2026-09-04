@@ -7,7 +7,7 @@
   <%= form_with url: products_path, method: :get, class: "flex flex-1 gap-2" do |form| %>
     <%= form.text_field :q, value: params[:q], placeholder: "Buscar por nombre o código…", class: field_classes %>
     <%= form.select :category_id, options_from_collection_for_select(@categories, :id, :name, params[:category_id]), { include_blank: "Todas las categorías" }, class: field_classes %>
-    <%= form.submit "Filtrar", class: button_classes(:secondary) %>
+    <%= form.submit "Filtrar", class: "#{button_classes(:secondary)} cursor-pointer" %>
   <% end %>
 </div>
 
