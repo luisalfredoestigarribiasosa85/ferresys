@@ -7,7 +7,9 @@ Rails.application.routes.draw do
   # Authenticated area
   root "dashboard#index"
 
-  resources :products
+  resources :products do
+    patch :adjust_stock, on: :member
+  end
   resources :categories
   resources :customers
   resources :suppliers
@@ -17,14 +19,18 @@ Rails.application.routes.draw do
       get :template
     end
   end
+  resources :payments, only: %i[index new create]
+  resource :settings, only: %i[edit update]
   resources :employees, controller: "users", only: %i[index new create]
   resources :sales do
     patch :cancel, on: :member
+    get :ticket, on: :member
   end
   resources :stock_movements, only: %i[index new create]
   resources :reports, only: [] do
     collection do
       get :daily_cash
+      get :sales_report
     end
   end
   resources :dashboard, only: :index

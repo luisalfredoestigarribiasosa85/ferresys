@@ -19,6 +19,21 @@
   <% end %>
 </div>
 
+<div class="mt-6">
+  <div class="<%= card_classes %> flex flex-wrap items-center justify-between gap-4 p-5">
+    <div class="flex items-center gap-4">
+      <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-red-50 text-red-600">
+        <%= sidebar_icon("balances") %>
+      </div>
+      <div>
+        <p class="text-sm font-medium text-slate-500">Cuentas por cobrar</p>
+        <p class="text-xl font-bold text-red-600"><%= money(@pending_credit) %></p>
+      </div>
+    </div>
+    <%= link_to "Ver cuentas por cobrar", payments_path, class: button_classes(:secondary) %>
+  </div>
+</div>
+
 <div class="mt-6 grid gap-6 xl:grid-cols-2">
   <div class="<%= card_classes %>">
     <div class="border-b border-slate-200 px-5 py-4">
@@ -45,6 +60,29 @@
 
   <div class="<%= card_classes %>">
     <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4">
+      <h3 class="font-semibold text-slate-900">Top productos del mes</h3>
+      <%= link_to "Reporte de ventas", sales_report_reports_path, class: "text-sm font-medium text-blue-600 hover:text-blue-700" %>
+    </div>
+    <div class="p-5">
+      <% if @top_products.any? %>
+        <ul class="divide-y divide-slate-100">
+          <% @top_products.each do |row| %>
+            <li class="flex items-center justify-between py-2.5">
+              <span class="text-sm font-medium text-slate-900"><%= row.name %></span>
+              <span class="text-sm font-semibold text-slate-900"><%= row.total_quantity %> vendidos</span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <%= render "shared/empty_state", message: "Sin ventas este mes" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="mt-6 grid gap-6 xl:grid-cols-2">
+  <div class="<%= card_classes %>">
+    <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4">
       <h3 class="font-semibold text-slate-900">Stock bajo</h3>
       <%= link_to "Productos", products_path, class: "text-sm font-medium text-blue-600 hover:text-blue-700" %>
     </div>
@@ -65,6 +103,26 @@
         </ul>
       <% else %>
         <%= render "shared/empty_state", message: "No hay productos con stock bajo" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="<%= card_classes %>">
+    <div class="border-b border-slate-200 px-5 py-4">
+      <h3 class="font-semibold text-slate-900">Ventas del mes por vendedor</h3>
+    </div>
+    <div class="p-5">
+      <% if @seller_totals.any? %>
+        <ul class="divide-y divide-slate-100">
+          <% @seller_totals.each do |name, total| %>
+            <li class="flex items-center justify-between py-2.5">
+              <span class="text-sm font-medium text-slate-900"><%= name || "Sin vendedor" %></span>
+              <span class="text-sm font-semibold text-slate-900"><%= money(total) %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <%= render "shared/empty_state", message: "Sin ventas este mes" %>
       <% end %>
     </div>
   </div>

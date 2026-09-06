@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <title><%= content_for(:title) || "Ticket" %> · Ferresys</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <style>
+      body { background: #f1f5f9; }
+      .ticket-shell { display: flex; justify-content: center; padding: 24px; }
+      .ticket { width: 80mm; max-width: 80mm; background: #fff; color: #111; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 11px; line-height: 1.45; padding: 16px; box-shadow: 0 10px 25px rgba(0,0,0,.15); }
+      .ticket .center { text-align: center; }
+      .ticket .muted { color: #555; }
+      .ticket h1 { font-size: 17px; font-weight: 700; text-transform: uppercase; }
+      .ticket .row { display: flex; justify-content: space-between; gap: 8px; }
+      .ticket .item { display: flex; justify-content: space-between; gap: 8px; }
+      .ticket .item .desc { flex: 1; }
+      .ticket .divider { border-top: 1px dashed #999; margin: 8px 0; }
+      .ticket .total { font-size: 15px; font-weight: 700; }
+      .ticket table { width: 100%; border-collapse: collapse; }
+      .ticket table td { padding: 2px 0; vertical-align: top; }
+      .ticket table td.right { text-align: right; white-space: nowrap; }
+      .no-print { text-align: center; padding: 8px 0 16px; }
+      .no-print button { font-size: 14px; font-weight: 600; padding: 10px 22px; border-radius: 8px; background: #2563eb; color: #fff; border: 0; cursor: pointer; }
+      @media print {
+        body { background: #fff; }
+        .ticket-shell { padding: 0; }
+        .ticket { box-shadow: none; padding: 0; }
+        .no-print { display: none; }
+        @page { margin: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="no-print">
+      <button onclick="window.print()">Imprimir</button>
+      <button onclick="window.close()" style="margin-left:8px;background:#475569">Cerrar</button>
+    </div>
+    <div class="ticket-shell">
+      <div class="ticket"><%= yield %></div>
+    </div>
+  </body>
+</html>

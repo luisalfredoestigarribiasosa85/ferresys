@@ -1,5 +1,5 @@
 class SalesController < ApplicationController
-  before_action :set_sale, only: %i[show cancel]
+  before_action :set_sale, only: %i[show cancel ticket]
 
   def index
     @sales = current_account.sales.order(created_at: :desc).includes(:customer, :user)
@@ -35,6 +35,12 @@ class SalesController < ApplicationController
   def cancel
     @sale.cancel!
     redirect_to sales_path, notice: "Venta #{@sale.number} anulada y stock restaurado"
+  rescue ActiveRecord::RecordInvalid
+    redirect_to @sale, alert: "No se puede anular la venta porque ya tiene pagos registrados"
+  end
+
+  def ticket
+    render layout: "ticket"
   end
 
   private

@@ -3,14 +3,40 @@
 <%= render "shared/page_header",
   title: "Venta ##{@sale.number}",
   subtitle: "#{simple_date(@sale.created_at)} · Registró: #{@sale.user&.name || "—"}",
-  action: link_to("Volver", sales_path, class: button_classes(:secondary)) %>
+  action: "#{link_to('Imprimir ticket', ticket_sale_path(@sale), target: '_blank', class: button_classes)} #{link_to('Volver', sales_path, class: button_classes(:secondary))}".html_safe %>
 
 <div class="grid gap-6 xl:grid-cols-3">
   <div class="<%= card_classes %> overflow-hidden xl:col-span-2">
     <div class="border-b border-slate-200 px-5 py-4">
       <div class="flex items-center justify-between">
         <h3 class="font-semibold text-slate-900">Detalle de la venta</h3>
-        <% if @sale.completed? %>
+<% if @sale.credit? && @sale.completed? %>
+      <div class="<%= card_classes %> p-6">
+        <div class="flex items-center justify-between">
+          <h3 class="font-semibold text-slate-900">Saldo pendiente</h3>
+          <span class="rounded-full bg-red-100 px-2.5 py-1 text-xs font-semibold text-red-700 capitalize"><%= money(@sale.balance) %></span>
+        </div>
+        <p class="mt-1 text-sm text-slate-500">Total <%= money(@sale.total) %> · Pagado <%= money(@sale.total - @sale.balance) %></p>
+        <% if @sale.payments.any? %>
+          <ul class="mt-4 divide-y divide-slate-100">
+            <% @sale.payments.order(created_at: :desc).each do |payment| %>
+              <li class="flex items-center justify-between py-2 text-sm">
+                <div>
+                  <span class="font-medium text-slate-900 capitalize"><%= payment.payment_method %></span>
+                  <span class="text-slate-500"> · <%= simple_date(payment.created_at) %></span>
+                </div>
+                <span class="font-semibold text-emerald-600"><%= money(payment.amount) %></span>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+        <% if @sale.balance.positive? %>
+          <%= link_to "Registrar pago", new_payment_path(customer_id: @sale.customer_id, sale_id: @sale.id), class: "#{button_classes} mt-4 w-full" %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if @sale.completed? %>
           <span class="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700">Completada</span>
         <% else %>
           <span class="rounded-full bg-red-100 px-2.5 py-1 text-xs font-semibold text-red-700">Anulada</span>

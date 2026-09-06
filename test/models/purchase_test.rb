@@ -38,4 +38,17 @@ class PurchaseTest < ActiveSupport::TestCase
     assert_not purchase.save
     assert_includes purchase.errors.full_messages.to_s, "al menos un producto"
   end
+
+  test "updates cost price with a weighted average of existing and new stock" do
+    product = products(:cement)
+    product.update!(stock: 10, cost_price: 5000)
+
+    purchase = Current.account.purchases.build(supplier: suppliers(:ferremax))
+    purchase.items.build(product: product, quantity: 10, unit_cost: 9000)
+    purchase.save!
+
+    # (10 * 5000 + 10 * 9000) / 20 = 7000
+    assert_equal 7000, product.reload.cost_price.to_f
+    assert_equal 20, product.reload.stock
+  end
 end

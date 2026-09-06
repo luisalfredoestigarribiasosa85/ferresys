@@ -3,6 +3,7 @@ one_cement:
   product: cement
   quantity: 1
   unit_price: 85000
+  unit_cost: 60000
   subtotal: 85000
 
 one_screwdriver:
@@ -10,4 +11,5 @@ one_screwdriver:
   product: screwdriver
   quantity: 1
   unit_price: 12000
+  unit_cost: 5000
   subtotal: 12000

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_02_190200) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_06_170000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -20,6 +20,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_190200) do
     t.string "name", default: "", null: false
     t.integer "next_sale_number", default: 1, null: false
     t.string "phone"
+    t.text "ticket_footer"
     t.datetime "updated_at", null: false
   end
 
@@ -44,6 +45,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_190200) do
     t.datetime "updated_at", null: false
     t.index ["account_id", "document_number"], name: "index_customers_on_account_id_and_document_number", unique: true
     t.index ["account_id"], name: "index_customers_on_account_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.decimal "amount", precision: 12, scale: 2, default: "0.0", null: false
+    t.datetime "created_at", null: false
+    t.bigint "customer_id", null: false
+    t.text "note"
+    t.integer "payment_method", default: 0, null: false
+    t.bigint "sale_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["account_id"], name: "index_payments_on_account_id"
+    t.index ["customer_id"], name: "index_payments_on_customer_id"
+    t.index ["sale_id"], name: "index_payments_on_sale_id"
+    t.index ["user_id"], name: "index_payments_on_user_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -101,6 +118,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_190200) do
     t.integer "quantity", default: 1, null: false
     t.bigint "sale_id", null: false
     t.decimal "subtotal", precision: 12, scale: 2, default: "0.0", null: false
+    t.decimal "unit_cost", precision: 12, scale: 2, default: "0.0", null: false
     t.decimal "unit_price", precision: 12, scale: 2, default: "0.0", null: false
     t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_sale_items_on_product_id"
@@ -176,6 +194,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_190200) do
 
   add_foreign_key "categories", "accounts"
   add_foreign_key "customers", "accounts"
+  add_foreign_key "payments", "accounts"
+  add_foreign_key "payments", "customers"
+  add_foreign_key "payments", "sales"
+  add_foreign_key "payments", "users"
   add_foreign_key "products", "accounts"
   add_foreign_key "products", "categories"
   add_foreign_key "purchase_items", "products"

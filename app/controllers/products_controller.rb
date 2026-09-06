@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: %i[show edit update destroy]
+  before_action :set_product, only: %i[show edit update adjust_stock destroy]
 
   def index
     @products = current_account.products.order(:name)
@@ -38,6 +38,39 @@ class ProductsController < ApplicationController
     else
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def adjust_stock
+    target = params.dig(:product, :stock).to_i
+    note = params.dig(:product, :note).to_s.strip.presence
+
+    if target.negative?
+      redirect_to @product, alert: "El stock no puede ser negativo" and return
+    end
+
+    difference = target - @product.stock
+
+    if difference.zero?
+      redirect_to @product, notice: "El stock ya era #{@product.stock} #{@product.unit}, sin cambios" and return
+    end
+
+    previous_stock = @product.stock
+
+    StockMovement.transaction do
+      @product.update!(stock: target)
+      @product.stock_movements.create!(
+        user: current_user,
+        movement_type: :adjustment,
+        quantity: difference,
+        previous_quantity: previous_stock,
+        new_quantity: target,
+        note: note || "Ajuste de stock"
+      )
+    end
+
+    redirect_to @product, notice: "Stock ajustado de #{previous_stock} a #{target} #{@product.unit}"
+  rescue ActiveRecord::RecordInvalid
+    redirect_to @product, alert: "No se pudo ajustar el stock"
   end
 
   def destroy

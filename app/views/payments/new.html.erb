@@ -1,0 +1,52 @@
+<% content_for(:page_title) { "Registrar pago" } %>
+<% open_sales_json = @open_sales.map { |s| { id: s.id, number: s.number, customer_id: s.customer_id, balance: s.balance.to_f } }.to_json %>
+
+<%= render "shared/page_header", title: "Registrar pago",
+  subtitle: "Cuentas por cobrar",
+  action: link_to("Volver", payments_path, class: button_classes(:secondary)) %>
+
+<%= render "shared/form_errors", object: @payment %>
+
+<%= form_with model: @payment,
+  data: { controller: "payments", payments_sales_value: open_sales_json },
+  class: "max-w-xl space-y-6" do |form| %>
+
+  <div class="<%= card_classes %> p-6">
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <%= form.label :customer_id, "Cliente", class: label_classes %>
+        <%= form.collection_select :customer_id, @customers, :id, :name,
+          { include_blank: "Seleccionar cliente" },
+          class: field_classes,
+          data: { payments_target: "customerSelect", action: "change->payments#filterSales" } %>
+      </div>
+      <div>
+        <%= form.label :payment_method, "Forma de pago", class: label_classes %>
+        <%= form.select :payment_method, Payment.payment_methods.map { |k, _| [ k.titleize, k ] }, {}, class: field_classes %>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <%= form.label :sale_id, "Venta a cobrar", class: label_classes %>
+      <%= form.select :sale_id, @payment.sale_id ? [ [ @payment.sale.number, @payment.sale_id ] ] : [], {},
+            class: field_classes, disabled: @payment.sale_id.blank?,
+            data: { payments_target: "saleSelect" } %>
+      <p class="mt-1 text-xs text-slate-400">Seleccioná un cliente para ver sus ventas a crédito con saldo pendiente.</p>
+    </div>
+
+    <div class="mt-4">
+      <%= form.label :amount, "Monto del pago", class: label_classes %>
+      <%= form.number_field :amount, step: "0.01", min: 0, class: field_classes, placeholder: "0" %>
+    </div>
+
+    <div class="mt-4">
+      <%= form.label :note, "Nota", class: label_classes %>
+      <%= form.text_area :note, rows: 2, class: field_classes, placeholder: "Comentario (opcional)" %>
+    </div>
+  </div>
+
+  <div class="flex gap-3">
+    <%= link_to "Cancelar", payments_path, class: button_classes(:secondary) %>
+    <%= form.submit "Registrar pago", class: button_classes %>
+  </div>
+<% end %>

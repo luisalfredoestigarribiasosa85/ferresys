@@ -22,6 +22,30 @@ one_cancelled:
   total: 12000
   created_at: <%= 1.hour.ago %>
 
+one_credit:
+  account: one
+  customer: juan
+  user: owner_one
+  number: "000003"
+  status: completed
+  payment_method: credit
+  subtotal: 50000
+  discount: 0
+  total: 50000
+  created_at: <%= 1.month.ago %>
+
+other_account_credit:
+  account: two
+  customer: other_account_customer
+  user: owner_two
+  number: "000002"
+  status: completed
+  payment_method: credit
+  subtotal: 30000
+  discount: 0
+  total: 30000
+  created_at: <%= 20.minutes.ago %>
+
 other_account_sale:
   account: two
   user: owner_two

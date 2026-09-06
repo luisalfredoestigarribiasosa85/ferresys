@@ -14,6 +14,7 @@ class SaleItem < ApplicationRecord
   private
 
   def defaults_from_product
-    self.unit_price ||= product.price
+    self.unit_price = product.price if unit_price.to_i.zero?
+    self.unit_cost = product.cost_price if unit_cost.to_i.zero?
   end
 end

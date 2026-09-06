@@ -1,0 +1,8 @@
+one_partial:
+  account: one
+  customer: juan
+  sale: one_credit
+  user: owner_one
+  amount: 20000
+  payment_method: cash
+  created_at: <%= 20.minutes.ago %>

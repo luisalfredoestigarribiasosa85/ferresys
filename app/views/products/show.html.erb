@@ -11,6 +11,16 @@
       <div class="flex justify-between"><dt class="text-slate-500">Descripción</dt><dd class="text-slate-800"><%= @product.description.presence || "—" %></dd></div>
       <div class="flex justify-between"><dt class="text-slate-500">Costo</dt><dd class="text-slate-800"><%= money(@product.cost_price) %></dd></div>
       <div class="flex justify-between"><dt class="text-slate-500">Precio</dt><dd class="font-semibold text-slate-900"><%= money(@product.price) %></dd></div>
+      <div class="flex justify-between">
+        <dt class="text-slate-500">Ganancia por unidad</dt>
+        <dd class="font-semibold text-emerald-600"><%= money(@product.price.to_d - @product.cost_price.to_d) %></dd>
+      </div>
+      <div class="flex justify-between">
+        <dt class="text-slate-500">Margen</dt>
+        <dd class="font-semibold text-slate-900">
+          <%= @product.price.positive? ? number_to_percentage((( @product.price.to_d - @product.cost_price.to_d ) / @product.price.to_d * 100), precision: 1) : "—" %>
+        </dd>
+      </div>
       <div class="flex justify-between"><dt class="text-slate-500">Unidad</dt><dd class="text-slate-800"><%= @product.unit %></dd></div>
       <div class="flex justify-between">
         <dt class="text-slate-500">Estado</dt>
@@ -41,6 +51,22 @@
     <div class="mt-5 flex gap-2 border-t border-slate-100 pt-5">
       <%= link_to "Ver movimientos", stock_movements_path(product_id: @product.id), class: button_classes(:secondary) %>
       <%= link_to "Registrar movimiento", new_stock_movement_path(product_id: @product.id), class: button_classes %>
+    </div>
+
+    <div class="mt-5 border-t border-slate-100 pt-5">
+      <h4 class="mb-2 text-sm font-semibold text-slate-900">Ajuste rápido de stock</h4>
+      <p class="mb-3 text-xs text-slate-500">Ideal para conteo físico. Se registra un movimiento de ajuste.</p>
+      <%= form_with model: @product, url: adjust_stock_product_path(@product), method: :patch, class: "flex flex-wrap items-end gap-3" do |form| %>
+        <div class="flex-1">
+          <%= form.label :stock, "Nuevo stock", class: label_classes %>
+          <%= form.number_field :stock, min: 0, value: @product.stock, class: field_classes %>
+        </div>
+        <div class="flex-[2]">
+          <%= form.label :note, "Nota", class: label_classes %>
+          <%= form.text_field :note, class: field_classes, placeholder: "Conteo físico" %>
+        </div>
+        <%= form.submit "Ajustar", class: "#{button_classes(:secondary)} cursor-pointer" %>
+      <% end %>
     </div>
   </div>
 </div>

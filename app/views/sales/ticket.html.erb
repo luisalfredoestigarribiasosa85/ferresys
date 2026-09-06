@@ -1,0 +1,60 @@
+<% content_for(:title) { "Venta ##{@sale.number}" } %>
+
+<div class="center">
+  <p class="font-bold"><%= current_account.name %></p>
+  <% if current_account.address.present? %>
+    <p class="muted"><%= current_account.address %></p>
+  <% end %>
+  <% if current_account.phone.present? %>
+    <p class="muted">Tel: <%= current_account.phone %></p>
+  <% end %>
+  <p class="muted">TICKET DE VENTA</p>
+  <p class="muted">#<%= @sale.number %></p>
+  <% if @sale.cancelled? %>
+    <p class="font-bold" style="color:#dc2626">ANULADA</p>
+  <% end %>
+</div>
+
+<div class="divider"></div>
+
+<div class="row"><span class="muted">Fecha</span><span><%= @sale.created_at.strftime("%d/%m/%Y %H:%M") %></span></div>
+<div class="row"><span class="muted">Cliente</span><span><%= @sale.customer&.name.presence || "Consumidor final" %></span></div>
+<div class="row"><span class="muted">Vendedor</span><span><%= @sale.user&.name || "—" %></span></div>
+<div class="row"><span class="muted">Pago</span><span class="capitalize"><%= @sale.payment_method %></span></div>
+
+<div class="divider"></div>
+
+<table>
+  <thead>
+    <tr>
+      <td class="muted">Producto</td>
+      <td class="right muted">Importe</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @sale.items.each do |item| %>
+      <tr>
+        <td>
+          <span><%= item.product.name %></span>
+          <span class="muted">  <%= item.quantity %> × <%= money(item.unit_price) %></span>
+        </td>
+        <td class="right"><%= money(item.line_subtotal) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="divider"></div>
+
+<div class="row"><span class="muted">Subtotal</span><span><%= money(@sale.subtotal) %></span></div>
+<% if @sale.discount.to_f.positive? %>
+  <div class="row"><span class="muted">Descuento</span><span>− <%= money(@sale.discount) %></span></div>
+<% end %>
+<div class="divider"></div>
+<div class="row total"><span>TOTAL</span><span><%= money(@sale.total) %></span></div>
+
+<div class="divider"></div>
+<p class="center muted">¡Gracias por su compra!</p>
+<% if current_account.ticket_footer.present? %>
+  <p class="center muted"><%= current_account.ticket_footer %></p>
+<% end %>
