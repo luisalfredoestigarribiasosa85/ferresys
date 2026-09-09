@@ -1,6 +1,6 @@
 <% if object.errors.any? %>
-  <div class="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
-    <p class="mb-1 font-semibold">No se pudo guardar:</p>
+  <div class="mb-6 rounded-lg border border-alert/30 bg-alert-soft px-4 py-3 text-sm text-alert">
+    <p class="mb-1 font-display font-bold uppercase tracking-wide">No se pudo guardar:</p>
     <ul class="list-disc space-y-0.5 pl-5">
       <% object.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>

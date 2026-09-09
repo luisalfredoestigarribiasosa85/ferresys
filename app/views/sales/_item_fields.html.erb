@@ -1,28 +1,28 @@
-<div class="flex items-start gap-2 rounded-lg border border-slate-200 bg-white p-3" data-sales-target="line">
+<div class="flex items-start gap-2 rounded-lg border border-line bg-surface p-3" data-sales-target="line">
   <div class="grid flex-1 grid-cols-12 gap-2">
     <div class="col-span-12 sm:col-span-6">
       <%= f.select :product_id,
           options_from_collection_for_select(@products, :id, ->(p) { "#{p.name} — #{money(p.price)}" }, f.object&.product_id),
           { include_blank: "Seleccionar producto" },
-          { class: field_classes, required: true, data: { sales_target: "product", action: "change->sales#selectProduct" } } %>
-      <p class="mt-1 text-xs text-slate-400" data-sales-target="stockHint">—</p>
+          { class: "field", required: true, data: { sales_target: "product", action: "change->sales#selectProduct" } } %>
+      <p class="num mt-1 text-xs text-faint" data-sales-target="stockHint">—</p>
     </div>
     <div class="col-span-4 sm:col-span-2">
-      <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-400 sm:hidden">Cant.</label>
+      <label class="eyebrow mb-1 block sm:hidden">Cant.</label>
       <input type="number" name="<%= f.object_name %>[quantity]" value="1" min="1" step="1"
-             class="<%= field_classes %>" data-sales-target="quantity" data-action="input->sales#recalculate" required>
+             class="field num" data-sales-target="quantity" data-action="input->sales#recalculate" required>
     </div>
     <div class="col-span-8 sm:col-span-2">
-      <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-400 sm:hidden">Precio</label>
+      <label class="eyebrow mb-1 block sm:hidden">Precio</label>
       <input type="number" name="<%= f.object_name %>[unit_price]" step="0.01" min="0"
-             class="<%= field_classes %>" data-sales-target="unitPrice" data-action="input->sales#recalculate">
+             class="field num" data-sales-target="unitPrice" data-action="input->sales#recalculate">
     </div>
     <div class="col-span-12 sm:col-span-2">
-      <span class="block text-right text-sm font-semibold text-slate-900 sm:pt-2" data-sales-target="subtotal">0</span>
+      <span class="num block text-right text-sm font-semibold text-ink sm:pt-2.5" data-sales-target="subtotal">0</span>
     </div>
   </div>
 
-  <button type="button" data-action="sales#removeLine" class="rounded-lg p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600" aria-label="Quitar producto" title="Quitar">
+  <button type="button" data-action="sales#removeLine" class="rounded-md p-1.5 text-faint transition hover:bg-alert-soft hover:text-alert" aria-label="Quitar producto" title="Quitar">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
   </button>
 </div>

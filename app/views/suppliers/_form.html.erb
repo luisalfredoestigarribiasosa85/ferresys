@@ -5,6 +5,7 @@
 <div class="max-w-lg <%= card_classes %> p-6">
   <%= render "shared/form_errors", object: @supplier %>
   <%= form_with model: @supplier, class: "space-y-4" do |form| %>
+    <div class="hazard mb-2 h-1 w-10"></div>
     <div>
       <%= form.label :name, "Razón social", class: label_classes %>
       <%= form.text_field :name, required: true, autofocus: true, class: field_classes %>
@@ -12,7 +13,7 @@
     <div class="grid gap-4 sm:grid-cols-2">
       <div>
         <%= form.label :ruc, "RUC", class: label_classes %>
-        <%= form.text_field :ruc, class: field_classes %>
+        <%= form.text_field :ruc, class: "field num" %>
       </div>
       <div>
         <%= form.label :phone, "Teléfono", class: label_classes %>
@@ -27,7 +28,7 @@
       <%= form.label :address, "Dirección", class: label_classes %>
       <%= form.text_field :address, class: field_classes %>
     </div>
-    <div class="flex items-center justify-end gap-3">
+    <div class="flex items-center justify-end gap-3 pt-2">
       <%= link_to "Cancelar", suppliers_path, class: button_classes(:secondary) %>
       <%= form.submit title, class: button_classes %>
     </div>

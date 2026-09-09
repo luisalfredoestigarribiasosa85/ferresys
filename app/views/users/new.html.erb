@@ -21,7 +21,7 @@
       <%= form.label :password_confirmation, "Confirmar contraseña", class: label_classes %>
       <%= form.password_field :password_confirmation, autocomplete: "new-password", required: true, class: field_classes %>
     </div>
-    <div class="flex items-center justify-end gap-3">
+    <div class="flex items-center justify-end gap-3 pt-2">
       <%= link_to "Cancelar", employees_path, class: button_classes(:secondary) %>
       <%= form.submit "Agregar", class: button_classes %>
     </div>

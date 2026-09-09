@@ -24,11 +24,11 @@
       </div>
       <div>
         <%= form.label :quantity, "Cantidad", class: label_classes %>
-        <%= form.number_field :quantity, required: true, class: field_classes %>
+        <%= form.number_field :quantity, required: true, class: "field num" %>
       </div>
     </div>
 
-    <p class="rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-500" data-movement-help>
+    <p class="rounded-lg border border-line bg-surface px-3 py-2 text-xs leading-relaxed text-muted" data-movement-help>
       Compra y devolución suman stock. Ajuste puede sumar o restar (usá un número negativo para descontar).
     </p>
 
@@ -37,7 +37,7 @@
       <%= form.text_field :note, class: field_classes, placeholder: "Ej: Compra al proveedor XYZ" %>
     </div>
 
-    <div class="flex items-center justify-end gap-3">
+    <div class="flex items-center justify-end gap-3 pt-2">
       <%= link_to "Cancelar", stock_movements_path, class: button_classes(:secondary) %>
       <%= form.submit "Registrar movimiento", class: button_classes %>
     </div>

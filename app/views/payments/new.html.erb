@@ -31,12 +31,12 @@
       <%= form.select :sale_id, @payment.sale_id ? [ [ @payment.sale.number, @payment.sale_id ] ] : [], {},
             class: field_classes, disabled: @payment.sale_id.blank?,
             data: { payments_target: "saleSelect" } %>
-      <p class="mt-1 text-xs text-slate-400">Seleccioná un cliente para ver sus ventas a crédito con saldo pendiente.</p>
+      <p class="mt-1 text-xs text-faint">Seleccioná un cliente para ver sus ventas a crédito con saldo pendiente.</p>
     </div>
 
     <div class="mt-4">
       <%= form.label :amount, "Monto del pago", class: label_classes %>
-      <%= form.number_field :amount, step: "0.01", min: 0, class: field_classes, placeholder: "0" %>
+      <%= form.number_field :amount, step: "0.01", min: 0, class: "field num", placeholder: "0" %>
     </div>
 
     <div class="mt-4">

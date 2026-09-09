@@ -18,8 +18,8 @@ module ApplicationHelper
 
   def sidebar_link(label, path, icon:)
     active = nav_item_active?(path)
-    classes = active ? "bg-slate-800 text-white" : "text-slate-300 hover:bg-slate-800 hover:text-white"
-    link_to path, class: "flex items-center gap-3 rounded-lg px-3 py-2 #{classes}" do
+    classes = active ? "border-hazard bg-white/5 text-paper" : "border-transparent text-paper/55 hover:bg-white/5 hover:text-paper"
+    link_to path, class: "flex items-center gap-3 border-l-2 px-4 py-2 text-sm font-medium transition #{classes}" do
       concat sidebar_icon(icon)
       concat content_tag(:span, label)
     end
@@ -47,39 +47,36 @@ module ApplicationHelper
   end
 
   def field_classes
-    # rubocop:disable Layout/LineLength
-    "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+    "field"
   end
 
   def field_classes_error
-    "w-full rounded-lg border border-red-400 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-200"
-    # rubocop:enable Layout/LineLength
+    "field field-error"
   end
 
   def label_classes
-    "mb-1 block text-sm font-medium text-slate-700"
+    "label"
   end
 
   def button_classes(variant = :primary)
-    base = "inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold transition"
     case variant
-    when :primary then "#{base} bg-blue-600 text-white shadow-sm hover:bg-blue-700"
-    when :secondary then "#{base} bg-white text-slate-700 ring-1 ring-slate-300 hover:bg-slate-50"
-    when :danger then "#{base} bg-red-600 text-white shadow-sm hover:bg-red-700"
+    when :primary then "btn btn-primary"
+    when :secondary then "btn btn-secondary"
+    when :danger then "btn btn-danger"
     end
   end
 
   def card_classes
-    "rounded-xl border border-slate-200 bg-white shadow-sm"
+    "card"
   end
 
   def badge_color(type)
     case type.to_s
-    when "purchase" then "bg-blue-100 text-blue-700"
-    when "sale" then "bg-emerald-100 text-emerald-700"
-    when "adjustment" then "bg-amber-100 text-amber-700"
-    when "return" then "bg-purple-100 text-purple-700"
-    else "bg-slate-100 text-slate-700"
+    when "purchase" then "badge badge-neutral"
+    when "sale" then "badge badge-ok"
+    when "adjustment" then "badge badge-warn"
+    when "return" then "badge badge-ink"
+    else "badge badge-neutral"
     end
   end
 

@@ -4,51 +4,53 @@
   link_to("Nueva venta", new_sale_path, class: button_classes) %>
 
 <% stat_cards = [
-  { label: "Ventas de hoy", value: @sales_count, color: :blue },
-  { label: "Ingresos de hoy", value: money(@daily_total), color: :emerald },
-  { label: "Ingresos del mes", value: money(@month_total), color: :indigo },
-  { label: "Productos", value: @product_count, color: :amber }
+  { label: "Ventas de hoy", value: @sales_count, tone: "text-ink" },
+  { label: "Ingresos de hoy", value: money(@daily_total), tone: "text-ok" },
+  { label: "Ingresos del mes", value: money(@month_total), tone: "text-ink" },
+  { label: "Productos", value: @product_count, tone: "text-ink" }
 ] %>
 
 <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-  <% stat_cards.each do |card| %>
-    <div class="<%= card_classes %> p-5">
-      <p class="text-sm font-medium text-slate-500"><%= card[:label] %></p>
-      <p class="mt-2 text-2xl font-bold text-slate-900"><%= card[:value] %></p>
+  <% stat_cards.each_with_index do |card, index| %>
+    <div class="card p-5 reveal" style="animation-delay: <%= index * 60 + 20 %>ms">
+      <p class="eyebrow"><%= card[:label] %></p>
+      <p class="num font-display mt-2 text-2xl font-bold <%= card[:tone] %>"><%= card[:value] %></p>
     </div>
   <% end %>
 </div>
 
 <div class="mt-6">
-  <div class="<%= card_classes %> flex flex-wrap items-center justify-between gap-4 p-5">
-    <div class="flex items-center gap-4">
-      <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-red-50 text-red-600">
-        <%= sidebar_icon("balances") %>
+  <div class="card reveal" style="animation-delay: 220ms">
+    <div class="flex flex-wrap items-center justify-between gap-4 p-5">
+      <div class="flex items-center gap-4">
+        <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-alert-soft text-alert">
+          <%= sidebar_icon("balances") %>
+        </div>
+        <div>
+          <p class="eyebrow">Cuentas por cobrar</p>
+          <p class="num font-display text-xl font-bold text-alert"><%= money(@pending_credit) %></p>
+        </div>
       </div>
-      <div>
-        <p class="text-sm font-medium text-slate-500">Cuentas por cobrar</p>
-        <p class="text-xl font-bold text-red-600"><%= money(@pending_credit) %></p>
-      </div>
+      <%= link_to "Ver cuentas por cobrar", payments_path, class: button_classes(:secondary) %>
     </div>
-    <%= link_to "Ver cuentas por cobrar", payments_path, class: button_classes(:secondary) %>
   </div>
 </div>
 
-<div class="mt-6 grid gap-6 xl:grid-cols-2">
-  <div class="<%= card_classes %>">
-    <div class="border-b border-slate-200 px-5 py-4">
-      <h3 class="font-semibold text-slate-900">Últimas ventas</h3>
+<div class="mt-8 grid gap-6 xl:grid-cols-2">
+  <div class="card overflow-hidden reveal" style="animation-delay: 280ms">
+    <div class="flex items-center justify-between border-b border-line px-5 py-4">
+      <h3 class="font-display text-sm font-bold uppercase tracking-wide text-ink">Últimas ventas</h3>
     </div>
     <div class="p-5">
       <% if @recent_sales.any? %>
-        <ul class="divide-y divide-slate-100">
+        <ul class="divide-y divide-line">
           <% @recent_sales.each do |sale| %>
-            <li class="flex items-center justify-between py-2.5">
-              <%= link_to sale_path(sale), class: "group flex items-center gap-3" do %>
-                <span class="text-xs font-mono text-slate-500">#<%= sale.number %></span>
-                <span class="group-hover:text-blue-600"><%= sale.customer&.name || "Consumidor final" %></span>
+            <li class="flex items-center justify-between py-3">
+              <%= link_to sale_path(sale), class: "group flex items-baseline gap-3" do %>
+                <span class="num text-xs text-faint">#<%= sale.number %></span>
+                <span class="group-hover:text-hazard"><%= sale.customer&.name || "Consumidor final" %></span>
               <% end %>
-              <span class="text-sm font-semibold text-slate-900"><%= money(sale.total) %></span>
+              <span class="num font-display text-sm font-bold"><%= money(sale.total) %></span>
             </li>
           <% end %>
         </ul>
@@ -58,18 +60,18 @@
     </div>
   </div>
 
-  <div class="<%= card_classes %>">
-    <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-      <h3 class="font-semibold text-slate-900">Top productos del mes</h3>
-      <%= link_to "Reporte de ventas", sales_report_reports_path, class: "text-sm font-medium text-blue-600 hover:text-blue-700" %>
+  <div class="card overflow-hidden reveal" style="animation-delay: 320ms">
+    <div class="flex items-center justify-between border-b border-line px-5 py-4">
+      <h3 class="font-display text-sm font-bold uppercase tracking-wide text-ink">Top productos del mes</h3>
+      <%= link_to "Reporte de ventas", sales_report_reports_path, class: "text-xs font-semibold uppercase tracking-wider text-hazard hover:text-hazard-dark" %>
     </div>
     <div class="p-5">
       <% if @top_products.any? %>
-        <ul class="divide-y divide-slate-100">
+        <ul class="divide-y divide-line">
           <% @top_products.each do |row| %>
-            <li class="flex items-center justify-between py-2.5">
-              <span class="text-sm font-medium text-slate-900"><%= row.name %></span>
-              <span class="text-sm font-semibold text-slate-900"><%= row.total_quantity %> vendidos</span>
+            <li class="flex items-center justify-between py-3">
+              <span class="text-sm font-medium"><%= row.name %></span>
+              <span class="num text-sm font-semibold"><%= row.total_quantity %> vendidos</span>
             </li>
           <% end %>
         </ul>
@@ -80,22 +82,22 @@
   </div>
 </div>
 
-<div class="mt-6 grid gap-6 xl:grid-cols-2">
-  <div class="<%= card_classes %>">
-    <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-      <h3 class="font-semibold text-slate-900">Stock bajo</h3>
-      <%= link_to "Productos", products_path, class: "text-sm font-medium text-blue-600 hover:text-blue-700" %>
+<div class="mt-8 grid gap-6 xl:grid-cols-2">
+  <div class="card overflow-hidden reveal" style="animation-delay: 360ms">
+    <div class="flex items-center justify-between border-b border-line px-5 py-4">
+      <h3 class="font-display text-sm font-bold uppercase tracking-wide text-ink">Stock bajo</h3>
+      <%= link_to "Productos", products_path, class: "text-xs font-semibold uppercase tracking-wider text-hazard hover:text-hazard-dark" %>
     </div>
     <div class="p-5">
       <% if @low_stock_products.any? %>
-        <ul class="divide-y divide-slate-100">
+        <ul class="divide-y divide-line">
           <% @low_stock_products.each do |product| %>
-            <li class="flex items-center justify-between py-2.5">
+            <li class="flex items-center justify-between py-3">
               <div>
-                <p class="text-sm font-medium text-slate-900"><%= product.name %></p>
-                <p class="text-xs text-slate-500"><%= product.sku.presence || "sin código" %></p>
+                <p class="text-sm font-medium"><%= product.name %></p>
+                <p class="num text-xs text-faint"><%= product.sku.presence || "sin código" %></p>
               </div>
-              <span class="<%= product.stock.zero? ? "rounded-full bg-red-100 px-2.5 py-1 text-xs font-bold text-red-700" : "rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-700" %>">
+              <span class="<%= product.stock.zero? ? "badge badge-alert" : "badge badge-warn" %>">
                 <%= product.stock %> <%= product.unit %>
               </span>
             </li>
@@ -107,17 +109,17 @@
     </div>
   </div>
 
-  <div class="<%= card_classes %>">
-    <div class="border-b border-slate-200 px-5 py-4">
-      <h3 class="font-semibold text-slate-900">Ventas del mes por vendedor</h3>
+  <div class="card overflow-hidden reveal" style="animation-delay: 400ms">
+    <div class="border-b border-line px-5 py-4">
+      <h3 class="font-display text-sm font-bold uppercase tracking-wide text-ink">Ventas del mes por vendedor</h3>
     </div>
     <div class="p-5">
       <% if @seller_totals.any? %>
-        <ul class="divide-y divide-slate-100">
+        <ul class="divide-y divide-line">
           <% @seller_totals.each do |name, total| %>
-            <li class="flex items-center justify-between py-2.5">
-              <span class="text-sm font-medium text-slate-900"><%= name || "Sin vendedor" %></span>
-              <span class="text-sm font-semibold text-slate-900"><%= money(total) %></span>
+            <li class="flex items-center justify-between py-3">
+              <span class="text-sm font-medium"><%= name || "Sin vendedor" %></span>
+              <span class="num font-display text-sm font-bold"><%= money(total) %></span>
             </li>
           <% end %>
         </ul>

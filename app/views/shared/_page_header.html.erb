@@ -1,11 +1,12 @@
-<div class="mb-6 flex items-center justify-between gap-4">
+<div class="mb-8 flex flex-wrap items-end justify-between gap-4">
   <div>
-    <h2 class="text-xl font-bold text-slate-900"><%= title %></h2>
+    <p class="eyebrow">Ferresys</p>
+    <h2 class="font-display mt-1 text-2xl font-bold text-ink"><%= title %></h2>
     <% if local_assigns[:subtitle].present? %>
-      <p class="mt-1 text-sm text-slate-500"><%= subtitle %></p>
+      <p class="mt-1 text-sm text-muted"><%= subtitle %></p>
     <% end %>
   </div>
   <% if local_assigns[:action].present? %>
-    <div><%= action %></div>
+    <div class="flex items-center gap-3"><%= action %></div>
   <% end %>
 </div>

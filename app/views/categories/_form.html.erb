@@ -5,6 +5,7 @@
 <div class="max-w-lg <%= card_classes %> p-6">
   <%= render "shared/form_errors", object: @category %>
   <%= form_with model: @category, class: "space-y-4" do |form| %>
+    <div class="hazard mb-2 h-1 w-10"></div>
     <div>
       <%= form.label :name, "Nombre", class: label_classes %>
       <%= form.text_field :name, required: true, autofocus: true, class: field_classes, placeholder: "Ej: Herramientas" %>
@@ -13,7 +14,7 @@
       <%= form.label :description, "Descripción", class: label_classes %>
       <%= form.text_area :description, rows: 3, class: field_classes %>
     </div>
-    <div class="flex items-center justify-end gap-3">
+    <div class="flex items-center justify-end gap-3 pt-2">
       <%= link_to "Cancelar", categories_path, class: button_classes(:secondary) %>
       <%= form.submit title, class: button_classes %>
     </div>

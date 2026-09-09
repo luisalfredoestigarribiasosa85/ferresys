@@ -1,5 +1,7 @@
 <% content_for(:title) { "Venta ##{@sale.number}" } %>
 
+<div class="hazardbar"></div>
+
 <div class="center">
   <p class="font-bold"><%= current_account.name %></p>
   <% if current_account.address.present? %>
@@ -11,7 +13,7 @@
   <p class="muted">TICKET DE VENTA</p>
   <p class="muted">#<%= @sale.number %></p>
   <% if @sale.cancelled? %>
-    <p class="font-bold" style="color:#dc2626">ANULADA</p>
+    <p class="font-bold" style="color:#b3261e">ANULADA</p>
   <% end %>
 </div>
 

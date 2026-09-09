@@ -1,4 +1,4 @@
-<% content_for(:page_title) { "Clientes" } %>
+<% content_for(:page_title) { title } %>
 
 <%= render "shared/page_header", title: title, action: link_to("Volver", customers_path, class: button_classes(:secondary)) %>
 
@@ -27,7 +27,7 @@
       <%= form.label :address, "Dirección", class: label_classes %>
       <%= form.text_field :address, class: field_classes %>
     </div>
-    <div class="flex items-center justify-end gap-3">
+    <div class="flex items-center justify-end gap-3 pt-2">
       <%= link_to "Cancelar", customers_path, class: button_classes(:secondary) %>
       <%= form.submit title, class: button_classes %>
     </div>

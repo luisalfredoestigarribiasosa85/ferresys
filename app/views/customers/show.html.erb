@@ -1,65 +1,73 @@
 <% content_for(:page_title) { @customer.name } %>
 
-<%= render "shared/page_header", title: @customer.name, action: link_to("Editar", edit_customer_path(@customer), class: button_classes(:secondary)) %>
+<%= render "shared/page_header", title: @customer.name,
+  subtitle: @customer.document_number.presence || "Cliente minorista",
+  action: link_to("Editar", edit_customer_path(@customer), class: button_classes(:secondary)) %>
 
 <div class="<%= card_classes %> p-6">
   <dl class="grid gap-4 text-sm sm:grid-cols-2">
-    <div><dt class="text-slate-500">Documento</dt><dd class="mt-0.5 text-slate-800"><%= @customer.document_number.presence || "—" %></dd></div>
-    <div><dt class="text-slate-500">Teléfono</dt><dd class="mt-0.5 text-slate-800"><%= @customer.phone.presence || "—" %></dd></div>
-    <div><dt class="text-slate-500">Email</dt><dd class="mt-0.5 text-slate-800"><%= @customer.email.presence || "—" %></dd></div>
-    <div><dt class="text-slate-500">Dirección</dt><dd class="mt-0.5 text-slate-800"><%= @customer.address.presence || "—" %></dd></div>
+    <div><dt class="text-muted">Documento</dt><dd class="num mt-0.5 font-medium text-ink"><%= @customer.document_number.presence || "—" %></dd></div>
+    <div><dt class="text-muted">Teléfono</dt><dd class="num mt-0.5 font-medium text-ink"><%= @customer.phone.presence || "—" %></dd></div>
+    <div><dt class="text-muted">Email</dt><dd class="mt-0.5 font-medium text-ink"><%= @customer.email.presence || "—" %></dd></div>
+    <div><dt class="text-muted">Dirección</dt><dd class="mt-0.5 font-medium text-ink"><%= @customer.address.presence || "—" %></dd></div>
   </dl>
 </div>
 
-<div class="mt-6 <%= card_classes %>">
-  <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-    <h3 class="font-semibold text-slate-900">Cuenta corriente</h3>
-    <% if @customer.total_debt.positive? %>
-      <span class="text-sm font-bold text-red-600"><%= money(@customer.total_debt) %></span>
-    <% end %>
-  </div>
-  <div class="p-5">
-    <% if @customer.total_debt.zero? %>
-      <p class="text-sm text-slate-500">El cliente no tiene deudas pendientes.</p>
-    <% else %>
-      <ul class="divide-y divide-slate-100">
-        <% @customer.open_credit_sales.each do |sale| %>
-          <li class="flex items-center justify-between py-2.5">
-            <div>
-              <%= link_to sale_path(sale), class: "text-sm font-medium text-slate-900 hover:text-blue-600" do %>
-                Venta #<%= sale.number %> · <%= simple_date(sale.created_at) %>
-              <% end %>
-              <p class="mt-0.5 text-xs text-slate-500">Total <%= money(sale.total) %> · Pagado <%= money(sale.total - sale.balance) %></p>
-            </div>
-            <div class="flex items-center gap-3">
-              <span class="text-sm font-semibold text-red-600"><%= money(sale.balance) %></span>
-              <%= link_to "Registrar pago", new_payment_path(customer_id: sale.customer_id, sale_id: sale.id), class: "#{button_classes(:secondary)} !px-3 !py-1.5 text-xs" %>
-            </div>
-          </li>
-        <% end %>
-      </ul>
-    <% end %>
+<div class="mt-6">
+  <div class="<%= card_classes %>">
+    <div class="flex items-center justify-between border-b border-line px-5 py-4">
+      <h3 class="font-display text-sm font-bold uppercase tracking-wide text-ink">Cuenta corriente</h3>
+      <% if @customer.total_debt.positive? %>
+        <span class="badge badge-alert"><%= money(@customer.total_debt) %></span>
+      <% else %>
+        <span class="badge badge-ok">Al día</span>
+      <% end %>
+    </div>
+    <div class="p-5">
+      <% if @customer.total_debt.zero? %>
+        <p class="text-sm text-muted">El cliente no tiene deudas pendientes.</p>
+      <% else %>
+        <ul class="divide-y divide-line">
+          <% @customer.open_credit_sales.each do |sale| %>
+            <li class="flex items-center justify-between gap-4 py-2.5">
+              <div>
+                <%= link_to sale_path(sale), class: "text-sm font-medium text-ink hover:text-hazard" do %>
+                  Venta #<%= sale.number %> · <%= simple_date(sale.created_at) %>
+                <% end %>
+                <p class="num mt-0.5 text-xs text-muted">Total <%= money(sale.total) %> · Pagado <%= money(sale.total - sale.balance) %></p>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="num text-sm font-semibold text-alert"><%= money(sale.balance) %></span>
+                <%= link_to "Registrar pago", new_payment_path(customer_id: sale.customer_id, sale_id: sale.id), class: button_classes(:secondary) %>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
   </div>
 </div>
 
-<div class="mt-6 <%= card_classes %>">
-  <div class="border-b border-slate-200 px-5 py-4">
-    <h3 class="font-semibold text-slate-900">Historial de ventas</h3>
-  </div>
-  <div class="p-5">
-    <% if @customer.sales.any? %>
-      <ul class="divide-y divide-slate-100">
-        <% @customer.sales.order(created_at: :desc).each do |sale| %>
-          <li class="flex items-center justify-between py-2.5">
-            <%= link_to sale_path(sale), class: "text-sm font-medium text-slate-900 hover:text-blue-600" do %>
-              Venta #<%= sale.number %> · <%= simple_date(sale.created_at) %>
-            <% end %>
-            <span class="text-sm font-semibold"><%= money(sale.total) %></span>
-          </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <%= render "shared/empty_state", message: "Este cliente no registra ventas" %>
-    <% end %>
+<div class="mt-6">
+  <div class="<%= card_classes %>">
+    <div class="border-b border-line px-5 py-4">
+      <h3 class="font-display text-sm font-bold uppercase tracking-wide text-ink">Historial de ventas</h3>
+    </div>
+    <div class="p-5">
+      <% if @customer.sales.any? %>
+        <ul class="divide-y divide-line">
+          <% @customer.sales.order(created_at: :desc).each do |sale| %>
+            <li class="flex items-center justify-between py-2.5">
+              <%= link_to sale_path(sale), class: "text-sm font-medium text-ink hover:text-hazard" do %>
+                Venta #<%= sale.number %> · <%= simple_date(sale.created_at) %>
+              <% end %>
+              <span class="num font-semibold text-ink"><%= money(sale.total) %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <%= render "shared/empty_state", message: "Este cliente no registra ventas" %>
+      <% end %>
+    </div>
   </div>
 </div>

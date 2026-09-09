@@ -5,29 +5,33 @@
 <%= render "shared/form_errors", object: @account %>
 
 <%= form_with model: @account, url: settings_path, method: :patch, class: "max-w-xl space-y-6" do |form| %>
-  <div class="<%= card_classes %> p-6 space-y-4">
-    <div>
-      <%= form.label :name, "Nombre de la ferretería", class: label_classes %>
-      <%= form.text_field :name, class: field_classes %>
-    </div>
-    <div class="grid gap-4 sm:grid-cols-2">
+  <div class="<%= card_classes %> p-6">
+    <div class="hazard mb-4 h-1 w-10"></div>
+    <div class="space-y-4">
       <div>
-        <%= form.label :phone, "Teléfono", class: label_classes %>
-        <%= form.text_field :phone, class: field_classes, placeholder: "0981 123 456" %>
+        <%= form.label :name, "Nombre de la ferretería", class: label_classes %>
+        <%= form.text_field :name, class: field_classes %>
       </div>
-      <div>
-        <%= form.label :address, "Dirección", class: label_classes %>
-        <%= form.text_field :address, class: field_classes, placeholder: "Av. Principal 123" %>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+          <%= form.label :phone, "Teléfono", class: label_classes %>
+          <%= form.text_field :phone, class: field_classes, placeholder: "0981 123 456" %>
+        </div>
+        <div>
+          <%= form.label :address, "Dirección", class: label_classes %>
+          <%= form.text_field :address, class: field_classes, placeholder: "Av. Principal 123" %>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="<%= card_classes %> p-6">
+    <div class="hazard mb-4 h-1 w-10"></div>
     <div>
       <%= form.label :ticket_footer, "Mensaje del ticket", class: label_classes %>
       <%= form.text_area :ticket_footer, rows: 2, class: field_classes,
             placeholder: "Ej: Los precios pueden variar sin previo aviso" %>
-      <p class="mt-1 text-xs text-slate-400">Se muestra al pie del recibo, debajo del agradecimiento.</p>
+      <p class="mt-1 text-xs text-faint">Se muestra al pie del recibo, debajo del agradecimiento.</p>
     </div>
   </div>
 
